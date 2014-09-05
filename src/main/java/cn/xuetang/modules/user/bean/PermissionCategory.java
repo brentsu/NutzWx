@@ -1,8 +1,7 @@
 package cn.xuetang.modules.user.bean;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.nutz.dao.entity.annotation.ColDefine;
 import org.nutz.dao.entity.annotation.ColType;
@@ -11,7 +10,6 @@ import org.nutz.dao.entity.annotation.EL;
 import org.nutz.dao.entity.annotation.Index;
 import org.nutz.dao.entity.annotation.Many;
 import org.nutz.dao.entity.annotation.Name;
-import org.nutz.dao.entity.annotation.One;
 import org.nutz.dao.entity.annotation.Prev;
 import org.nutz.dao.entity.annotation.Readonly;
 import org.nutz.dao.entity.annotation.Table;
@@ -31,11 +29,12 @@ public class PermissionCategory {
 	@Column("parent")
 	private String parentId;
 
-	@One(target = PermissionCategory.class, field = "parentId")
+	//@One(target = PermissionCategory.class, field = "parentId")
+	@Readonly
 	private PermissionCategory parent;
 
 	@Readonly
-	private Set<PermissionCategory> children = new HashSet<>();
+	private List<PermissionCategory> children = new ArrayList<>();
 
 	@Column
 	private String name;
@@ -80,11 +79,11 @@ public class PermissionCategory {
 		this.parent = parent;
 	}
 
-	public Set<PermissionCategory> getChildren() {
+	public List<PermissionCategory> getChildren() {
 		return children;
 	}
 
-	public void setChildren(Set<PermissionCategory> children) {
+	public void setChildren(List<PermissionCategory> children) {
 		this.children = children;
 	}
 

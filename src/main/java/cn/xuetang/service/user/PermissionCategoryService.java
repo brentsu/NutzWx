@@ -1,12 +1,15 @@
 package cn.xuetang.service.user;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.pager.Pager;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.json.Json;
 import org.nutz.lang.Lang;
 import org.nutz.service.IdEntityService;
 
@@ -24,7 +27,34 @@ public class PermissionCategoryService extends IdEntityService<PermissionCategor
 	}
 
 	public List<PermissionCategory> list() {
-		return dao().fetchLinks(query(Cnd.orderBy().asc("listIndex"), null), null);
+		List<PermissionCategory> list = dao().fetchLinks(query(Cnd.orderBy().asc("listIndex"), null), null);
+		for (PermissionCategory permissionCategory : list) {
+			initPermissionCategory(permissionCategory);
+		}
+		return list;
+	}
+
+	private void initPermissionCategory(PermissionCategory permissionCategory) {
+		boolean haveParent = StringUtils.isNotBlank(permissionCategory.getParentId());
+		if (haveParent) {
+			permissionCategory.setParent(dao().fetch(getEntityClass(), Cnd.where("id", "=", permissionCategory.getParentId())));
+			boolean haveChilen = StringUtils.isNotBlank(permissionCategory.getTreePath());
+			if (haveChilen) {
+				final List<String> chilenIds = Json.fromJsonAsList(String.class, permissionCategory.getTreePath());
+				permissionCategory.setChildren(new ArrayList<PermissionCategory>() {
+					private static final long serialVersionUID = -7813279993889152029L;
+					{
+						for (String id : chilenIds) {
+							PermissionCategory chilen = dao().fetch(getEntityClass(), Cnd.where("id", "=", id));
+							add(chilen);
+							initPermissionCategory(chilen);
+						}
+					}
+				});
+			}
+			initPermissionCategory(permissionCategory.getParent());
+		}
+
 	}
 
 	public void insert(PermissionCategory permission) {
