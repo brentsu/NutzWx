@@ -27,7 +27,7 @@ public class PermissionCategoryService extends IdEntityService<PermissionCategor
 	}
 
 	public List<PermissionCategory> list() {
-		List<PermissionCategory> list = dao().fetchLinks(query(Cnd.orderBy().asc("listIndex"), null), null);
+		List<PermissionCategory> list = dao().fetch(query(Cnd.orderBy().asc("listIndex"), null));
 		for (PermissionCategory permissionCategory : list) {
 			initPermissionCategory(permissionCategory);
 		}
@@ -35,6 +35,7 @@ public class PermissionCategoryService extends IdEntityService<PermissionCategor
 	}
 
 	private void initPermissionCategory(PermissionCategory permissionCategory) {
+		dao().fetchLinks(permissionCategory, null);
 		boolean haveParent = StringUtils.isNotBlank(permissionCategory.getParentId());
 		if (haveParent) {
 			permissionCategory.setParent(dao().fetch(getEntityClass(), Cnd.where("id", "=", permissionCategory.getParentId())));
