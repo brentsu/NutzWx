@@ -20,7 +20,7 @@ public class SysTaskService extends BaseService<Sys_task> {
 	}
 
 	public List<Sys_task> list() {
-		return dao().query(getEntityClass(), Cnd.where("is_enable", "=", 0));
+		return dao().query(getEntityClass(), Cnd.where("is_enable", "=", true));
 	}
 
 }
