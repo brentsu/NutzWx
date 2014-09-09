@@ -7,8 +7,6 @@ import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.ManyMany;
 import org.nutz.dao.entity.annotation.Table;
 
-import cn.xuetang.modules.user.bean.Permission;
-
 /**
  * @author Wizzer.cn
  * @time 2012-9-20 下午1:33:32
@@ -30,15 +28,15 @@ public class Sys_role {
 	private int location;
 	@ManyMany(target = Sys_user.class, relation = "sys_user_role", from = "roleid", to = "userid")
 	private List<Sys_user> users;
-	@ManyMany(target = Permission.class, relation = "sys_role_permission", from = "roleid", to = "permissionid")
-	private List<Permission> permissions;
+	@ManyMany(target = Sys_permission.class, relation = "sys_role_permission", from = "roleid", to = "permissionid")
+	private List<Sys_permission> syspermissions;
 	
-	public List<Permission> getPermissions() {
-		return permissions;
+	public List<Sys_permission> getSyspermissions() {
+		return syspermissions;
 	}
 
-	public void setPermissions(List<Permission> permissions) {
-		this.permissions = permissions;
+	public void setSyspermissions(List<Sys_permission> syspermissions) {
+		this.syspermissions = syspermissions;
 	}
 
 	public int getId() {

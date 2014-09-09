@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import cn.xuetang.service.sys.SysPermissionCategoryService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -16,9 +17,8 @@ import org.nutz.mvc.annotation.Param;
 import org.nutz.web.Webs;
 
 import cn.xuetang.modules.sys.bean.Sys_user;
-import cn.xuetang.modules.user.bean.PermissionCategory;
+import cn.xuetang.modules.sys.bean.Sys_permissionCategory;
 import cn.xuetang.service.sys.SysUserService;
-import cn.xuetang.service.user.PermissionCategoryService;
 
 /**
  * @author Wizzer.cn
@@ -32,7 +32,7 @@ public class IndexAction {
 	protected SysUserService sysUserService;
 
 	@Inject
-	private PermissionCategoryService permissionCategoryService;
+	private SysPermissionCategoryService sysPermissionCategoryService;
 
 	@At
 	@Ok("raw")
@@ -44,8 +44,8 @@ public class IndexAction {
 
 	@At
 	@Ok("vm:template.private.index")
-	public List<PermissionCategory> index(@Attr(Webs.ME) Sys_user user) {
-		return permissionCategoryService.list();
+	public List<Sys_permissionCategory> index(@Attr(Webs.ME) Sys_user user) {
+		return sysPermissionCategoryService.list();
 	}
 
 }

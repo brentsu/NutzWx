@@ -310,13 +310,13 @@
         <a #if(${menu.url})href="${menu.url}" #else href="javascript:;"#end class="dropdown-toggle">
          #if(${menu.style})<i class="${menu.style}"></i>#end
             <span class="menu-text">${menu.name}</span>
-            #if($menu.permissions.size()>0)
+            #if($menu.syspermissions.size()>0)
             <b class="arrow icon-angle-down"></b>
             #end
         </a>
-        #if($menu.permissions.size()>0)
+        #if($menu.syspermissions.size()>0)
         <ul class="submenu">
- 	        #foreach($submenu in $menu.permissions)
+ 	        #foreach($submenu in $menu.syspermissions)
  	           #if($submenu.show)
             <li><a #if(${submenu.url})href="${submenu.url}" #else href="javascript:;"#end>
                 #if(${submenu.style})<i class="${submenu.style}"></i>#end

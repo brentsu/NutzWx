@@ -33,18 +33,24 @@ public class Sys_user {
 	private String password;
 	@Column
 	private String salt;
+    @Column
+    @ColDefine(type = ColType.TEXT)
+    private String avatar;
 	@Column
-	private String descript;
+    @ColDefine(type = ColType.VARCHAR,width = 255)
+    private String descript;
 	@Column
 	private String pozition;
 	@Column
-	private String address;
+    @ColDefine(type = ColType.VARCHAR,width = 255)
+    private String address;
 	@Column
 	private String telephone;
 	@Column
 	private String mobile;
 	@Column
-	private String email;
+    @ColDefine(type = ColType.VARCHAR,width = 255)
+    private String email;
 	@Column
 	private int location;
 	@Column

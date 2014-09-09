@@ -7,7 +7,7 @@ import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import cn.xuetang.modules.sys.bean.Sys_role;
-import cn.xuetang.modules.user.bean.Permission;
+import cn.xuetang.modules.sys.bean.Sys_permission;
 import cn.xuetang.service.BaseService;
 
 @IocBean(fields = { "dao" })
@@ -24,8 +24,8 @@ public class SysRoleService extends BaseService<Sys_role> {
 	public List<String> getPermissionNameList(Sys_role role) {
 		dao().fetchLinks(role, "permissions");
 		List<String> permissionNameList = new ArrayList<String>();
-		for (Permission permission : role.getPermissions()) {
-			permissionNameList.add(permission.getName());
+		for (Sys_permission syspermission : role.getSyspermissions()) {
+			permissionNameList.add(syspermission.getName());
 		}
 		return permissionNameList;
 	}

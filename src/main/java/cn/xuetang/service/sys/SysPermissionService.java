@@ -1,9 +1,10 @@
-package cn.xuetang.service.user;
+package cn.xuetang.service.sys;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.xuetang.modules.sys.bean.Sys_permission;
 import org.apache.commons.lang.StringUtils;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -13,42 +14,41 @@ import org.nutz.lang.Lang;
 import org.nutz.service.IdEntityService;
 
 import cn.xuetang.common.page.Pagination;
-import cn.xuetang.modules.user.bean.Permission;
 
 @IocBean(args = { "refer:dao" })
-public class PermissionService extends IdEntityService<Permission> {
+public class SysPermissionService extends IdEntityService<Sys_permission> {
 
-	public PermissionService() {
+	public SysPermissionService() {
 	}
 
-	public PermissionService(Dao dao) {
+	public SysPermissionService(Dao dao) {
 		super(dao);
 	}
 
 	
-	public List<Permission> list() {
+	public List<Sys_permission> list() {
 		return query(null, null);
 	}
 
 	public Map<Long, String> map() {
 		Map<Long, String> map = new HashMap<Long, String>();
-		List<Permission> permissions = query(null, null);
-		for (Permission permission : permissions) {
-			map.put(permission.getId(), permission.getName());
+		List<Sys_permission> syspermissions = query(null, null);
+		for (Sys_permission syspermission : syspermissions) {
+			map.put(syspermission.getId(), syspermission.getName());
 		}
 		return map;
 	}
 
-	public void insert(Permission permission) {
-		dao().insert(permission);
+	public void insert(Sys_permission syspermission) {
+		dao().insert(syspermission);
 	}
 
-	public Permission view(Long id) {
+	public Sys_permission view(Long id) {
 		return fetch(id);
 	}
 
-	public void update(Permission permission) {
-		dao().update(permission);
+	public void update(Sys_permission syspermission) {
+		dao().update(syspermission);
 	}
 
 	protected int getPageNumber(Integer pageNumber) {
@@ -64,8 +64,8 @@ public class PermissionService extends IdEntityService<Permission> {
 		pageNumber = getPageNumber(pageNumber);
 		Cnd cnd = Cnd.where("permissionCategoryId", "=", permissionCategoryId);
 		Pager pager = dao().createPager(pageNumber, pageSize);
-		List<Permission> list = dao().query(Permission.class, StringUtils.isBlank(permissionCategoryId) ? null : cnd, pager);
-		pager.setRecordCount(dao().count(Permission.class, StringUtils.isBlank(permissionCategoryId) ? null : cnd));
+		List<Sys_permission> list = dao().query(Sys_permission.class, StringUtils.isBlank(permissionCategoryId) ? null : cnd, pager);
+		pager.setRecordCount(dao().count(Sys_permission.class, StringUtils.isBlank(permissionCategoryId) ? null : cnd));
 		return new Pagination(pageNumber, pageSize, pager.getRecordCount(), list);
 	}
 }

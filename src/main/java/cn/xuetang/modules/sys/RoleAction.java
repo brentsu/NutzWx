@@ -28,7 +28,6 @@ import org.nutz.mvc.annotation.Param;
 
 import cn.xuetang.common.util.SortHashtable;
 import cn.xuetang.common.util.StringUtil;
-import cn.xuetang.modules.sys.bean.Sys_resource;
 import cn.xuetang.modules.sys.bean.Sys_role;
 import cn.xuetang.modules.sys.bean.Sys_unit;
 import cn.xuetang.modules.sys.bean.Sys_user;
@@ -36,7 +35,6 @@ import cn.xuetang.modules.wx.bean.Weixin_channel;
 import cn.xuetang.modules.wx.bean.Weixin_channel_role;
 import cn.xuetang.service.sys.AppInfoService;
 import cn.xuetang.service.sys.AppProjectService;
-import cn.xuetang.service.sys.SysResourceService;
 import cn.xuetang.service.sys.SysRoleService;
 import cn.xuetang.service.sys.SysUnitService;
 import cn.xuetang.service.sys.SysUserService;
@@ -60,8 +58,6 @@ public class RoleAction {
 	private AppProjectService appProjectService;
 	@Inject
 	private SysRoleService sysRoleService;
-	@Inject
-	private SysResourceService sysResourceService;
 	@Inject
 	private WeixinChannelService weixinChannelService;
 	@Inject
@@ -333,34 +329,34 @@ public class RoleAction {
 			Hashtable<String, String> rh = new Hashtable<String, String>();
 			Sql htsql = Sqls.create("select RESOURCEID,BUTTON from SYS_ROLE_RESOURCE where roleid=" + roleid);
 			rh = sysRoleService.getHTable(htsql);
-			List<Sys_resource> list = sysResourceService.listByCnd(sql);
-			List<Map<String, Object>> array = new ArrayList<Map<String, Object>>();
-			Map<String, Object> jsonroot = new HashMap<String, Object>();
-			jsonroot.put("id", "");
-			jsonroot.put("pId", "0");
-			jsonroot.put("name", "资源列表");
-			jsonroot.put("checked", false);
-			jsonroot.put("nocheck", true);
-			jsonroot.put("button", "");
-			jsonroot.put("open", true);
-			jsonroot.put("icon", appInfoService.getAPP_BASE_NAME() + "/images/icons/icon042a1.gif");
-			array.add(jsonroot);
-			for (int i = 0; i < list.size(); i++) {
-				Sys_resource obj = list.get(i);
-				Map<String, Object> jsonobj = new HashMap<String, Object>();
-				jsonobj.put("id", obj.getId());
-				jsonobj.put("pId", obj.getId().substring(0, obj.getId().length() - 4));
-				jsonobj.put("name", obj.getName());
-				if (rh != null && null != rh.get(String.valueOf(obj.getId()))) {
-					jsonobj.put("checked", true);
-				} else {
-					jsonobj.put("checked", false);
-				}
-				jsonobj.put("res_button", obj.getButton());
-				jsonobj.put("button", rh.get(String.valueOf(obj.getId())));
-				array.add(jsonobj);
-			}
-			req.setAttribute("str", Json.toJson(array));
+//			List<Sys_resource> list = sysResourceService.listByCnd(sql);
+//			List<Map<String, Object>> array = new ArrayList<Map<String, Object>>();
+//			Map<String, Object> jsonroot = new HashMap<String, Object>();
+//			jsonroot.put("id", "");
+//			jsonroot.put("pId", "0");
+//			jsonroot.put("name", "资源列表");
+//			jsonroot.put("checked", false);
+//			jsonroot.put("nocheck", true);
+//			jsonroot.put("button", "");
+//			jsonroot.put("open", true);
+//			jsonroot.put("icon", appInfoService.getAPP_BASE_NAME() + "/images/icons/icon042a1.gif");
+//			array.add(jsonroot);
+//			for (int i = 0; i < list.size(); i++) {
+//				Sys_resource obj = list.get(i);
+//				Map<String, Object> jsonobj = new HashMap<String, Object>();
+//				jsonobj.put("id", obj.getId());
+//				jsonobj.put("pId", obj.getId().substring(0, obj.getId().length() - 4));
+//				jsonobj.put("name", obj.getName());
+//				if (rh != null && null != rh.get(String.valueOf(obj.getId()))) {
+//					jsonobj.put("checked", true);
+//				} else {
+//					jsonobj.put("checked", false);
+//				}
+//				jsonobj.put("res_button", obj.getButton());
+//				jsonobj.put("button", rh.get(String.valueOf(obj.getId())));
+//				array.add(jsonobj);
+//			}
+//			req.setAttribute("str", Json.toJson(array));
 			req.setAttribute("roleid", roleid);
 		} catch (Exception e) {
 			e.printStackTrace();

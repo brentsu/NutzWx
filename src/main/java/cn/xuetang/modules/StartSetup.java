@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import cn.xuetang.modules.sys.bean.Sys_permission;
+import cn.xuetang.modules.sys.bean.Sys_permissionCategory;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Sha256Hash;
@@ -25,8 +27,6 @@ import org.quartz.impl.StdSchedulerFactory;
 import cn.xuetang.common.task.LoadTask;
 import cn.xuetang.modules.sys.bean.Sys_role;
 import cn.xuetang.modules.sys.bean.Sys_user;
-import cn.xuetang.modules.user.bean.Permission;
-import cn.xuetang.modules.user.bean.PermissionCategory;
 import cn.xuetang.service.sys.AppInfoService;
 
 /**
@@ -53,15 +53,15 @@ public class StartSetup implements Setup {
 		try {
 			Ioc ioc = Mvcs.getIoc();
 			Dao dao = ioc.get(Dao.class);
-			/*dao.drop(Sys_user.class);
+			dao.drop(Sys_user.class);
 			dao.drop(Sys_role.class);
-			dao.drop(Permission.class);
-			dao.drop(PermissionCategory.class);*/
+			dao.drop(Sys_permission.class);
+			dao.drop(Sys_permissionCategory.class);
 			if (!dao.exists(Sys_user.class)) {
 				dao.create(Sys_user.class, false);
 				dao.create(Sys_role.class, false);
-				dao.create(Permission.class, false);
-				dao.create(PermissionCategory.class, false);
+				dao.create(Sys_permission.class, false);
+				dao.create(Sys_permissionCategory.class, false);
 				final Sys_user defaultUser = new Sys_user();
 				defaultUser.setLoginname("admin");
 				defaultUser.setRealname("admin");
@@ -81,106 +81,106 @@ public class StartSetup implements Setup {
 				 * 
 				 * 权限管理 sys:permission 权限分类 sys:permissionCategory
 				 */
-				List<Permission> pers = new ArrayList<Permission>();
-				PermissionCategory perCategory = new PermissionCategory();
+				List<Sys_permission> pers = new ArrayList<Sys_permission>();
+				Sys_permissionCategory perCategory = new Sys_permissionCategory();
 				perCategory.setStyle("icon-cog");
 				perCategory.setLocked(true);
 				perCategory.setName("系统管理");
-				perCategory.setPermissions(pers);
+				perCategory.setSyspermissions(pers);
 				perCategory.setListIndex(1);
-				Permission allPerm = new Permission();
+				Sys_permission allPerm = new Sys_permission();
 				allPerm.setDescription("全部权限");
 				allPerm.setLocked(true);
 				allPerm.setShow(false);
 				allPerm.setName("*:*:*");
-				allPerm.setPermissionCategory(perCategory);
+				allPerm.setSyspermissionCategory(perCategory);
 				pers.add(allPerm);
 
-				Permission per = new Permission();
+				Sys_permission per = new Sys_permission();
 				per.setDescription("机构管理");
 				per.setLocked(true);
 				per.setShow(true);
 				per.setName("nutzwx:sys.user.unit");
 				per.setUrl("/private/sys/unit");
-				per.setPermissionCategory(perCategory);
+				per.setSyspermissionCategory(perCategory);
 				pers.add(per);
 
-				per = new Permission();
+				per = new Sys_permission();
 				per.setUrl("/private/sys/user");
 				per.setStyle("fa fa-users");
 				per.setShow(true);
 				per.setDescription("用户管理");
 				per.setLocked(true);
 				per.setName("nutzwx:sys.user");
-				per.setPermissionCategory(perCategory);
+				per.setSyspermissionCategory(perCategory);
 				pers.add(per);
 
-				per = new Permission();
+				per = new Sys_permission();
 				per.setUrl("/private/sys/role");
 				per.setStyle("fa fa-user");
 				per.setShow(true);
 				per.setDescription("角色管理");
 				per.setLocked(true);
 				per.setName("nutzwx:sys.role");
-				per.setPermissionCategory(perCategory);
+				per.setSyspermissionCategory(perCategory);
 				pers.add(per);
 
-				per = new Permission();
+				per = new Sys_permission();
 				per.setUrl("/private/sys/res");
 				per.setStyle("fa fa-user");
 				per.setShow(true);
 				per.setDescription("资源管理");
 				per.setLocked(true);
 				per.setName("nutzwx:sys.res");
-				per.setPermissionCategory(perCategory);
+				per.setSyspermissionCategory(perCategory);
 				pers.add(per);
 
-				per = new Permission();
+				per = new Sys_permission();
 				per.setUrl("/private/sys/config");
 				per.setStyle("fa fa-user");
 				per.setShow(true);
 				per.setDescription("参数配置");
 				per.setLocked(true);
 				per.setName("nutzwx:sys.config");
-				per.setPermissionCategory(perCategory);
+				per.setSyspermissionCategory(perCategory);
 				pers.add(per);
 
-				per = new Permission();
+				per = new Sys_permission();
 				per.setUrl("/private/sys/dict");
 				per.setStyle("fa fa-user");
 				per.setShow(true);
 				per.setDescription("数字字典");
 				per.setLocked(true);
 				per.setName("nutzwx:sys.dict");
-				per.setPermissionCategory(perCategory);
+				per.setSyspermissionCategory(perCategory);
 				pers.add(per);
 
-				per = new Permission();
+				per = new Sys_permission();
 				per.setUrl("/private/sys/task");
 				per.setStyle("fa fa-user");
 				per.setShow(true);
 				per.setDescription("定时任务");
 				per.setLocked(true);
 				per.setName("nutzwx:sys.task");
-				per.setPermissionCategory(perCategory);
+				per.setSyspermissionCategory(perCategory);
 				pers.add(per);
 
-				per = new Permission();
+				per = new Sys_permission();
 				per.setUrl("/private/sys/safe");
 				per.setShow(true);
 				per.setDescription("访问控制");
 				per.setLocked(true);
 				per.setName("nutzwx:sys.safe");
-				per.setPermissionCategory(perCategory);
+				per.setSyspermissionCategory(perCategory);
 				pers.add(per);
 
-				per = new Permission();
+				per = new Sys_permission();
 				per.setUrl("/private/sys/user/log");
 				per.setShow(true);
 				per.setDescription("登陆日志");
 				per.setLocked(true);
 				per.setName("nutzwx:sys.log");
-				per.setPermissionCategory(perCategory);
+				per.setSyspermissionCategory(perCategory);
 				pers.add(per);
 
 				dao.insertWith(perCategory, null);
@@ -188,14 +188,14 @@ public class StartSetup implements Setup {
 				Sys_role role = new Sys_role();
 				role.setName("超级权限");
 				role.setDescript("拥有超级管理员的权限");
-				List<Permission> permissions = new ArrayList<Permission>();
-				permissions.add(allPerm);
-				role.setPermissions(permissions);
+				List<Sys_permission> syspermissions = new ArrayList<Sys_permission>();
+				syspermissions.add(allPerm);
+				role.setSyspermissions(syspermissions);
 				List<Sys_user> users = new ArrayList<Sys_user>();
 				users.add(defaultUser);
 				role.setUsers(users);
 				dao.insertWith(role, "users");
-				dao.insertRelation(role, "permissions");
+				dao.insertRelation(role, "syspermissions");
 				//
 				wxManager(dao);
 
@@ -224,163 +224,163 @@ public class StartSetup implements Setup {
 	}
 
 	private void app(Dao dao) {
-		List<Permission> pers = new ArrayList<Permission>();
-		PermissionCategory perCategory = new PermissionCategory();
+		List<Sys_permission> pers = new ArrayList<Sys_permission>();
+		Sys_permissionCategory perCategory = new Sys_permissionCategory();
 		perCategory.setListIndex(2);
 		perCategory.setLocked(true);
 		perCategory.setName("应用管理");
         perCategory.setStyle("icon-list-alt");
-		perCategory.setPermissions(pers);
+		perCategory.setSyspermissions(pers);
 
-		Permission allPerm = new Permission();
+		Sys_permission allPerm = new Sys_permission();
 		allPerm.setUrl("/private/app/project");
 		allPerm.setShow(true);
 		allPerm.setDescription("项目管理");
 		allPerm.setLocked(true);
 		allPerm.setName("nutzwx:app.project");
-		allPerm.setPermissionCategory(perCategory);
+		allPerm.setSyspermissionCategory(perCategory);
 		pers.add(allPerm);
 
-		Permission per = new Permission();
+		Sys_permission per = new Sys_permission();
 		per.setUrl("/private/app/info");
 		per.setShow(true);
 		per.setDescription("接口管理");
 		per.setLocked(true);
 		per.setName("nutzwx:app.api");
-		per.setPermissionCategory(perCategory);
+		per.setSyspermissionCategory(perCategory);
 		pers.add(per);
 		dao.insertWith(perCategory, null);
 	}
 
 	private void memberCenter(Dao dao) {
 
-		List<Permission> pers = new ArrayList<Permission>();
-		PermissionCategory perCategory = new PermissionCategory();
+		List<Sys_permission> pers = new ArrayList<Sys_permission>();
+		Sys_permissionCategory perCategory = new Sys_permissionCategory();
 		perCategory.setListIndex(3);
 		perCategory.setLocked(true);
 		perCategory.setName("会员中心");
         perCategory.setStyle("icon-edit");
-        perCategory.setPermissions(pers);
+        perCategory.setSyspermissions(pers);
 
-		Permission allPerm = new Permission();
+		Sys_permission allPerm = new Sys_permission();
 		allPerm.setUrl("/private/user/info");
 		allPerm.setShow(true);
 		allPerm.setDescription("会员资料");
 		allPerm.setLocked(true);
 		allPerm.setName("nutzwx:member.info");
-		allPerm.setPermissionCategory(perCategory);
+		allPerm.setSyspermissionCategory(perCategory);
 		pers.add(allPerm);
 
-		Permission per = new Permission();
+		Sys_permission per = new Sys_permission();
 		per.setUrl("/private/user/score");
 		per.setShow(true);
 		per.setDescription("会员积分");
 		per.setLocked(true);
 		per.setName("nutzwx:member.score");
-		per.setPermissionCategory(perCategory);
+		per.setSyspermissionCategory(perCategory);
 		pers.add(per);
 
-		per = new Permission();
+		per = new Sys_permission();
 		per.setUrl("/private/user/connwx");
 		per.setShow(true);
 		per.setDescription("微信帐号");
 		per.setLocked(true);
 		per.setName("nutzwx:member.account");
-		per.setPermissionCategory(perCategory);
+		per.setSyspermissionCategory(perCategory);
 		pers.add(per);
 
 		dao.insertWith(perCategory, null);
 	}
 
 	private void article(Dao dao) {
-		List<Permission> pers = new ArrayList<Permission>();
-		PermissionCategory perCategory = new PermissionCategory();
+		List<Sys_permission> pers = new ArrayList<Sys_permission>();
+		Sys_permissionCategory perCategory = new Sys_permissionCategory();
 		perCategory.setStyle("icon-text-width");
 		perCategory.setListIndex(4);
 		perCategory.setLocked(true);
 		perCategory.setName("内容管理");
-		perCategory.setPermissions(pers);
+		perCategory.setSyspermissions(pers);
 
-		Permission allPerm = new Permission();
+		Sys_permission allPerm = new Sys_permission();
 		allPerm.setUrl("/private/wx/content");
 		allPerm.setShow(true);
 		allPerm.setDescription("文章管理");
 		allPerm.setLocked(true);
 		allPerm.setName("nutzwx:article.content");
-		allPerm.setPermissionCategory(perCategory);
+		allPerm.setSyspermissionCategory(perCategory);
 		pers.add(allPerm);
 
-		Permission per = new Permission();
+		Sys_permission per = new Sys_permission();
 		per.setUrl("/private/wx/channel");
 		per.setShow(true);
 		per.setDescription("栏目管理");
 		per.setLocked(true);
 		per.setName("nutzwx:article.channel");
-		per.setPermissionCategory(perCategory);
+		per.setSyspermissionCategory(perCategory);
 		pers.add(per);
 		dao.insertWith(perCategory, null);
 
 	}
 
 	private void wxManager(Dao dao) {
-		List<Permission> pers = new ArrayList<Permission>();
-		PermissionCategory perCategory = new PermissionCategory();
+		List<Sys_permission> pers = new ArrayList<Sys_permission>();
+		Sys_permissionCategory perCategory = new Sys_permissionCategory();
 		perCategory.setStyle("icon-desktop");
 		perCategory.setListIndex(5);
 		perCategory.setLocked(true);
 		perCategory.setName("微信管理");
-		perCategory.setPermissions(pers);
+		perCategory.setSyspermissions(pers);
 
-		Permission allPerm = new Permission();
+		Sys_permission allPerm = new Sys_permission();
 		allPerm.setUrl("/private/wx/txt");
 		allPerm.setShow(true);
 		allPerm.setDescription("微信回复");
 		allPerm.setLocked(true);
 		allPerm.setName("nutzwx:wx.txt");
-		allPerm.setPermissionCategory(perCategory);
+		allPerm.setSyspermissionCategory(perCategory);
 		pers.add(allPerm);
 
-		Permission per = new Permission();
+		Sys_permission per = new Sys_permission();
 		per.setShow(true);
 		per.setDescription("客服群发");
 		per.setLocked(true);
 		per.setName("nutzwx:wx.push.group");
-		per.setPermissionCategory(perCategory);
+		per.setSyspermissionCategory(perCategory);
 		pers.add(per);
 
-		per = new Permission();
+		per = new Sys_permission();
 		per.setUrl("/private/wx/push");
 		per.setShow(true);
 		per.setDescription("高级群发");
 		per.setLocked(true);
 		per.setName("nutzwx:wx.push.supper");
-		per.setPermissionCategory(perCategory);
+		per.setSyspermissionCategory(perCategory);
 		pers.add(per);
 
-		per = new Permission();
+		per = new Sys_permission();
 		per.setUrl("/private/wx/image");
 		per.setShow(true);
 		per.setDescription("微信相册");
 		per.setLocked(true);
 		per.setName("nutzwx:wx.image");
-		per.setPermissionCategory(perCategory);
+		per.setSyspermissionCategory(perCategory);
 		pers.add(per);
 
-		per = new Permission();
+		per = new Sys_permission();
 		per.setUrl("/private/wx/video");
 		per.setShow(true);
 		per.setDescription("微信视频");
 		per.setLocked(true);
 		per.setName("nutzwx:wx.video");
-		per.setPermissionCategory(perCategory);
+		per.setSyspermissionCategory(perCategory);
 		pers.add(per);
 
-		per = new Permission();
+		per = new Sys_permission();
 		per.setShow(true);
 		per.setDescription("微信菜单");
 		per.setLocked(true);
 		per.setName("nutzwx:wx.menu");
-		per.setPermissionCategory(perCategory);
+		per.setSyspermissionCategory(perCategory);
 		pers.add(per);
 		dao.insertWith(perCategory, null);
 	}

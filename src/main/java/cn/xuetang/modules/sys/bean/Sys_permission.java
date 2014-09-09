@@ -1,4 +1,4 @@
-package cn.xuetang.modules.user.bean;
+package cn.xuetang.modules.sys.bean;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,11 +13,9 @@ import org.nutz.dao.entity.annotation.One;
 import org.nutz.dao.entity.annotation.Table;
 import org.nutz.dao.entity.annotation.TableIndexes;
 
-import cn.xuetang.modules.sys.bean.Sys_role;
-
 @Table("sys_permission")
 @TableIndexes({ @Index(name = "permission_name_id", fields = { "name" }, unique = true) })
-public class Permission implements Serializable {
+public class Sys_permission implements Serializable {
 	private static final long serialVersionUID = -8140799124476746216L;
 
 	@Id
@@ -37,8 +35,8 @@ public class Permission implements Serializable {
 	@Column("permission_category_id")
 	private String permissionCategoryId;
 
-	@One(target = PermissionCategory.class, field = "permissionCategoryId")
-	private PermissionCategory permissionCategory;
+	@One(target = Sys_permissionCategory.class, field = "permissionCategoryId")
+	private Sys_permissionCategory syspermissionCategory;
 
 	@Column("is_locked")
 	@ColDefine(type = ColType.BOOLEAN)
@@ -94,12 +92,12 @@ public class Permission implements Serializable {
 		this.permissionCategoryId = permissionCategoryId;
 	}
 
-	public PermissionCategory getPermissionCategory() {
-		return permissionCategory;
+	public Sys_permissionCategory getSyspermissionCategory() {
+		return syspermissionCategory;
 	}
 
-	public void setPermissionCategory(PermissionCategory permissionCategory) {
-		this.permissionCategory = permissionCategory;
+	public void setSyspermissionCategory(Sys_permissionCategory syspermissionCategory) {
+		this.syspermissionCategory = syspermissionCategory;
 	}
 
 	public Long getId() {
@@ -150,7 +148,7 @@ public class Permission implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Permission other = (Permission) obj;
+		Sys_permission other = (Sys_permission) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
