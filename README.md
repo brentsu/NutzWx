@@ -22,8 +22,7 @@ NutzWx
 ==============
 
 在 velocity 模板文件中，实现 shiro 权限验证
-在 applicationContext.xml 只有此功能的核心配置的例子，其它相关配置不属于此项目范围之类。
-velocityToolBox.xml 文件中也只列出了，该功能的配置。
+
 
 使用方法：
 
