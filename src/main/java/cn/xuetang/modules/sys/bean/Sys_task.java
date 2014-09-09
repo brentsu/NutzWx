@@ -1,5 +1,7 @@
 package cn.xuetang.modules.sys.bean;
 
+import org.nutz.dao.entity.annotation.ColDefine;
+import org.nutz.dao.entity.annotation.ColType;
 import org.nutz.dao.entity.annotation.Column;
 import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.Table;
@@ -8,216 +10,177 @@ import org.nutz.dao.entity.annotation.Table;
  * @author Wizzer
  * @time 2014-02-27 10:01:23
  */
-@Table("SYS_TASK")
+@Table("sys_task")
 public class Sys_task {
 	@Id
-	private int task_id;
-	@Column
-	private String task_code;
-	@Column
-	private int task_type;
-	@Column
-	private String task_name;
-	@Column
-	private String job_class;
+	@Column("task_id")
+	private int taskId;
+	@Column("task_code")
+	private String taskCode;
+	@Column("task_type")
+	private int taskType;
+	@Column("task_name")
+	private String taskName;
+	@Column("job_class")
+	private String jobClass;
 	@Column
 	private int execycle;
-	@Column
-	private int day_of_month;
-	@Column
+	@Column("day_of_month")
+	private int dayOfMonth;
+	@Column("day_of_week")
 	private int day_of_week;
 	@Column
 	private int hour;
 	@Column
 	private int minute;
-	@Column
-	private int interval_hour;
-	@Column
-	private int interval_minute;
-	@Column
-	private int task_interval_unit;
-	@Column
-	private String cron_expression;
-	@Column
-	private int is_enable;
-	@Column
-	private String task_remark;
-	@Column
-	private long user_id;
-	@Column
+	@Column("interval_hour")
+	private int intervalHour;
+	@Column("interval_minute")
+	private int intervalMinute;
+	@Column("task_interval_unit")
+	private int taskIntervalUnit;
+	@Column("cron_expression")
+	private String cronExpression;
+	@Column("is_enable")
+	@ColDefine(type=ColType.BOOLEAN)
+	private boolean enable;
+	@Column("task_remark")
+	private String taskRemark;
+	@Column("user_id")
+	private long userId;
+	@Column("createTime")
 	private String create_time;
-	@Column
-	private String param_value;
-	@Column
-	private int task_interval;
-	@Column
-	private int task_threadnum;
-
-	public int getTask_id() {
-		return task_id;
+	@Column("param_value")
+	private String paramValue;
+	@Column("task_interval")
+	private int taskInterval;
+	@Column("task_threadnum")
+	private int taskThreadnum;
+	public int getTaskId() {
+		return taskId;
 	}
-
-	public void setTask_id(int task_id) {
-		this.task_id = task_id;
+	public void setTaskId(int taskId) {
+		this.taskId = taskId;
 	}
-
-	public String getTask_code() {
-		return task_code;
+	public String getTaskCode() {
+		return taskCode;
 	}
-
-	public void setTask_code(String task_code) {
-		this.task_code = task_code;
+	public void setTaskCode(String taskCode) {
+		this.taskCode = taskCode;
 	}
-
-	public int getTask_type() {
-		return task_type;
+	public int getTaskType() {
+		return taskType;
 	}
-
-	public void setTask_type(int task_type) {
-		this.task_type = task_type;
+	public void setTaskType(int taskType) {
+		this.taskType = taskType;
 	}
-
-	public String getTask_name() {
-		return task_name;
+	public String getTaskName() {
+		return taskName;
 	}
-
-	public void setTask_name(String task_name) {
-		this.task_name = task_name;
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
 	}
-
-	public String getJob_class() {
-		return job_class;
+	public String getJobClass() {
+		return jobClass;
 	}
-
-	public void setJob_class(String job_class) {
-		this.job_class = job_class;
+	public void setJobClass(String jobClass) {
+		this.jobClass = jobClass;
 	}
-
 	public int getExecycle() {
 		return execycle;
 	}
-
 	public void setExecycle(int execycle) {
 		this.execycle = execycle;
 	}
-
-	public int getDay_of_month() {
-		return day_of_month;
+	public int getDayOfMonth() {
+		return dayOfMonth;
 	}
-
-	public void setDay_of_month(int day_of_month) {
-		this.day_of_month = day_of_month;
+	public void setDayOfMonth(int dayOfMonth) {
+		this.dayOfMonth = dayOfMonth;
 	}
-
 	public int getDay_of_week() {
 		return day_of_week;
 	}
-
 	public void setDay_of_week(int day_of_week) {
 		this.day_of_week = day_of_week;
 	}
-
 	public int getHour() {
 		return hour;
 	}
-
 	public void setHour(int hour) {
 		this.hour = hour;
 	}
-
 	public int getMinute() {
 		return minute;
 	}
-
 	public void setMinute(int minute) {
 		this.minute = minute;
 	}
-
-	public int getInterval_hour() {
-		return interval_hour;
+	public int getIntervalHour() {
+		return intervalHour;
 	}
-
-	public void setInterval_hour(int interval_hour) {
-		this.interval_hour = interval_hour;
+	public void setIntervalHour(int intervalHour) {
+		this.intervalHour = intervalHour;
 	}
-
-	public int getInterval_minute() {
-		return interval_minute;
+	public int getIntervalMinute() {
+		return intervalMinute;
 	}
-
-	public void setInterval_minute(int interval_minute) {
-		this.interval_minute = interval_minute;
+	public void setIntervalMinute(int intervalMinute) {
+		this.intervalMinute = intervalMinute;
 	}
-
-	public int getTask_interval_unit() {
-		return task_interval_unit;
+	public int getTaskIntervalUnit() {
+		return taskIntervalUnit;
 	}
-
-	public void setTask_interval_unit(int task_interval_unit) {
-		this.task_interval_unit = task_interval_unit;
+	public void setTaskIntervalUnit(int taskIntervalUnit) {
+		this.taskIntervalUnit = taskIntervalUnit;
 	}
-
-	public String getCron_expression() {
-		return cron_expression;
+	public String getCronExpression() {
+		return cronExpression;
 	}
-
-	public void setCron_expression(String cron_expression) {
-		this.cron_expression = cron_expression;
+	public void setCronExpression(String cronExpression) {
+		this.cronExpression = cronExpression;
 	}
-
-	public int getIs_enable() {
-		return is_enable;
+	public boolean isEnable() {
+		return enable;
 	}
-
-	public void setIs_enable(int is_enable) {
-		this.is_enable = is_enable;
+	public void setEnable(boolean enable) {
+		this.enable = enable;
 	}
-
-	public String getTask_remark() {
-		return task_remark;
+	public String getTaskRemark() {
+		return taskRemark;
 	}
-
-	public void setTask_remark(String task_remark) {
-		this.task_remark = task_remark;
+	public void setTaskRemark(String taskRemark) {
+		this.taskRemark = taskRemark;
 	}
-
-	public long getUser_id() {
-		return user_id;
+	public long getUserId() {
+		return userId;
 	}
-
-	public void setUser_id(long user_id) {
-		this.user_id = user_id;
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
-
 	public String getCreate_time() {
 		return create_time;
 	}
-
 	public void setCreate_time(String create_time) {
 		this.create_time = create_time;
 	}
-
-	public String getParam_value() {
-		return param_value;
+	public String getParamValue() {
+		return paramValue;
+	}
+	public void setParamValue(String paramValue) {
+		this.paramValue = paramValue;
+	}
+	public int getTaskInterval() {
+		return taskInterval;
+	}
+	public void setTaskInterval(int taskInterval) {
+		this.taskInterval = taskInterval;
+	}
+	public int getTaskThreadnum() {
+		return taskThreadnum;
+	}
+	public void setTaskThreadnum(int taskThreadnum) {
+		this.taskThreadnum = taskThreadnum;
 	}
 
-	public void setParam_value(String param_value) {
-		this.param_value = param_value;
-	}
-
-	public int getTask_interval() {
-		return task_interval;
-	}
-
-	public void setTask_interval(int task_interval) {
-		this.task_interval = task_interval;
-	}
-
-	public int getTask_threadnum() {
-		return task_threadnum;
-	}
-
-	public void setTask_threadnum(int task_threadnum) {
-		this.task_threadnum = task_threadnum;
-	}
 }

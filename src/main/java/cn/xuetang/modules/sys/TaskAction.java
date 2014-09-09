@@ -64,9 +64,9 @@ public class TaskAction {
 	@Ok("raw")
 	public boolean add(@Param("..") Sys_task task, HttpSession session) throws SchedulerException, ClassNotFoundException {
 		Sys_user user = (Sys_user) session.getAttribute("userSession");
-		task.setTask_code(UUID.randomUUID().toString());
+		task.setTaskCode(UUID.randomUUID().toString());
 		task.setCreate_time(DateUtil.getCurDateTime());
-		task.setUser_id(user.getUserid());
+		task.setUserId(user.getUserid());
 		if (sysTaskService.insert(task)) {
 			startTask(task);
 			return true;
@@ -84,16 +84,16 @@ public class TaskAction {
 	public boolean update(@Param("..") Sys_task task, HttpSession session) throws SchedulerException, ClassNotFoundException {
 		Sys_user user = (Sys_user) session.getAttribute("userSession");
 		// 结束之前的任务，开始新任务调度
-		String oldTaskCode = task.getTask_code();
+		String oldTaskCode = task.getTaskCode();
 		if (!Strings.isBlank(oldTaskCode)) {
 			log.info("Update End..." + oldTaskCode);
 			endTask(oldTaskCode);
 		}
 		UUID uuid = UUID.randomUUID();
-		task.setTask_code(uuid.toString());
-		task.setUser_id(user.getUserid());
+		task.setTaskCode(uuid.toString());
+		task.setUserId(user.getUserid());
 		boolean res = sysTaskService.update(task);
-		if (res && task.getIs_enable() == 0) {
+		if (res && !task.isEnable()) {
 			log.info("Update Satrt...");
 			startTask(task);
 		}
@@ -105,7 +105,7 @@ public class TaskAction {
 		Sys_task task = sysTaskService.fetch(task_id);
 		boolean res = sysTaskService.delete(task_id) > 0;
 		if (res) {
-			endTask(task.getTask_code());
+			endTask(task.getTaskCode());
 		}
 		return res;
 	}
@@ -114,7 +114,7 @@ public class TaskAction {
 	public boolean deleteIds(@Param("ids") String[] ids) throws SchedulerException, ClassNotFoundException {
 		List<Sys_task> list = sysTaskService.listByCnd(Cnd.where("task_id", "in", ids));
 		for (Sys_task task : list) {
-			endTask(task.getTask_code());
+			endTask(task.getTaskCode());
 		}
 		return sysTaskService.deleteByIds(ids);
 	}
@@ -138,21 +138,21 @@ public class TaskAction {
 			String cronExpression = getCronExpressionFromDB(task);
 			if (StringUtils.isNotBlank(cronExpression)) {
 				Map<String, String> map = new HashMap<String, String>();
-				map.put("param_value", task.getParam_value());
-				JobBuilder jobBuilder = JobBuilder.newJob(getClassByTask(task.getJob_class()));
+				map.put("param_value", task.getParamValue());
+				JobBuilder jobBuilder = JobBuilder.newJob(getClassByTask(task.getJobClass()));
 				jobBuilder.setJobData(getJobDataMap(map));
 				TriggerBuilder triggerBuilder = TriggerBuilder.newTrigger();
-				if (StringUtils.isNotBlank(task.getTask_code())) {
-					jobBuilder.withIdentity(task.getTask_code(), Scheduler.DEFAULT_GROUP);
-					triggerBuilder.withIdentity(task.getTask_code(), Scheduler.DEFAULT_GROUP);
+				if (StringUtils.isNotBlank(task.getTaskCode())) {
+					jobBuilder.withIdentity(task.getTaskCode(), Scheduler.DEFAULT_GROUP);
+					triggerBuilder.withIdentity(task.getTaskCode(), Scheduler.DEFAULT_GROUP);
 				} else {
 					UUID uuid = UUID.randomUUID();
 					jobBuilder.withIdentity(uuid.toString(), Scheduler.DEFAULT_GROUP);
 					triggerBuilder.withIdentity(uuid.toString(), Scheduler.DEFAULT_GROUP);
-					task.setTask_code(uuid.toString());
+					task.setTaskCode(uuid.toString());
 					sysTaskService.update(task);
 				}
-				log.info("task start code:" + task.getTask_code());
+				log.info("task start code:" + task.getTaskCode());
 				String cronExpressionFromDB = getCronExpressionFromDB(task);
 				log.info(cronExpressionFromDB);
 				triggerBuilder.withSchedule(getCronScheduleBuilder(cronExpressionFromDB));
@@ -211,20 +211,20 @@ public class TaskAction {
 
 	public String getCronExpressionFromDB(Sys_task task) {
 		if (task.getExecycle() == 2) {
-			return task.getCron_expression();
+			return task.getCronExpression();
 		} else {
-			int execycle = task.getTask_interval_unit();
+			int execycle = task.getTaskIntervalUnit();
 			String excep = "";
 			if (execycle == 5) {// 月
-				excep = "0  " + task.getMinute() + " " + task.getHour() + " " + task.getDay_of_month() + " * ?";
+				excep = "0  " + task.getMinute() + " " + task.getHour() + " " + task.getDayOfMonth() + " * ?";
 			} else if (execycle == 4) {// 周
 				excep = "0  " + task.getMinute() + " " + task.getHour() + " " + " ? " + " * " + task.getDay_of_week();
 			} else if (execycle == 3) {// 日
 				excep = "0  " + task.getMinute() + " " + task.getHour() + " " + " * * ?";
 			} else if (execycle == 2) {// 时
-				excep = "0 0 */" + task.getInterval_hour() + " * * ?";
+				excep = "0 0 */" + task.getIntervalHour() + " * * ?";
 			} else if (execycle == 1) {// 分
-				excep = "0  */" + task.getInterval_minute() + " * * * ?";
+				excep = "0  */" + task.getIntervalMinute() + " * * * ?";
 			}
 			return excep;
 		}

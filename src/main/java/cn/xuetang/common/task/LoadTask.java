@@ -44,23 +44,23 @@ public class LoadTask implements Runnable {
 				Sys_task task = tasks.get(i);
 
 				Map<String, String> map = new HashMap<String, String>();
-				map.put("param_value", task.getParam_value());
-				map.put("task_interval", String.valueOf(task.getTask_interval()));
-				JobBuilder jobBuilder = JobBuilder.newJob(getClassByTask(task.getJob_class()));
+				map.put("param_value", task.getParamValue());
+				map.put("task_interval", String.valueOf(task.getTaskInterval()));
+				JobBuilder jobBuilder = JobBuilder.newJob(getClassByTask(task.getJobClass()));
 				TriggerBuilder triggerBuilder = TriggerBuilder.newTrigger();
-				if (StringUtils.isNotBlank(task.getTask_code())) {
-					jobBuilder.withIdentity(task.getTask_code(), Scheduler.DEFAULT_GROUP);
-					triggerBuilder.withIdentity(task.getTask_code(), Scheduler.DEFAULT_GROUP);
+				if (StringUtils.isNotBlank(task.getTaskCode())) {
+					jobBuilder.withIdentity(task.getTaskCode(), Scheduler.DEFAULT_GROUP);
+					triggerBuilder.withIdentity(task.getTaskCode(), Scheduler.DEFAULT_GROUP);
 				} else {
 					UUID uuid = UUID.randomUUID();
 					jobBuilder.withIdentity(uuid.toString(), Scheduler.DEFAULT_GROUP);
 					triggerBuilder.withIdentity(uuid.toString(), Scheduler.DEFAULT_GROUP);
-					task.setTask_code(uuid.toString());
+					task.setTaskCode(uuid.toString());
 					sysTaskService.update(task);
 				}
-				map.put("task_code", String.valueOf(task.getTask_code()));
-				map.put("task_id", String.valueOf(task.getTask_id()));
-				map.put("task_threadnum", String.valueOf(task.getTask_threadnum()));
+				map.put("task_code", String.valueOf(task.getTaskCode()));
+				map.put("task_id", String.valueOf(task.getTaskId()));
+				map.put("task_threadnum", String.valueOf(task.getTaskThreadnum()));
 				jobBuilder.setJobData(getJobDataMap(map));
 				String cronExpressionFromDB = getCronExpressionFromDB(task);
 				log.info(cronExpressionFromDB);
@@ -86,20 +86,20 @@ public class LoadTask implements Runnable {
 
 	public String getCronExpressionFromDB(Sys_task task) {
 		if (task.getExecycle() == 2) {
-			return task.getCron_expression();
+			return task.getCronExpression();
 		} else {
-			int execycle = task.getTask_interval_unit();
+			int execycle = task.getTaskIntervalUnit();
 			String excep = "";
 			if (execycle == 5) {// 月
-				excep = "0  " + task.getMinute() + " " + task.getHour() + " " + task.getDay_of_month() + " * ?";
+				excep = "0  " + task.getMinute() + " " + task.getHour() + " " + task.getDayOfMonth() + " * ?";
 			} else if (execycle == 4) {// 周
 				excep = "0  " + task.getMinute() + " " + task.getHour() + " " + " ? " + " * " + task.getDay_of_week();
 			} else if (execycle == 3) {// 日
 				excep = "0  " + task.getMinute() + " " + task.getHour() + " " + " * * ?";
 			} else if (execycle == 2) {// 时
-				excep = "0 0 */" + task.getInterval_hour() + " * * ?";
+				excep = "0 0 */" + task.getIntervalHour() + " * * ?";
 			} else if (execycle == 1) {// 分
-				excep = "0  */" + task.getInterval_minute() + " * * * ?";
+				excep = "0  */" + task.getIntervalMinute() + " * * * ?";
 			}
 			return excep;
 		}
