@@ -17,6 +17,7 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
+import org.nutz.lang.Times;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
@@ -65,7 +66,7 @@ public class TaskAction {
 	public boolean add(@Param("..") Sys_task task, HttpSession session) throws SchedulerException, ClassNotFoundException {
 		Sys_user user = (Sys_user) session.getAttribute("userSession");
 		task.setTaskCode(UUID.randomUUID().toString());
-		task.setCreate_time(DateUtil.getCurDateTime());
+		task.setCreateTime(Times.now());
 		task.setUserId(user.getUserid());
 		if (sysTaskService.insert(task)) {
 			startTask(task);

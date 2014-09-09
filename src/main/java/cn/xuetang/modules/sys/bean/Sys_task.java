@@ -1,5 +1,7 @@
 package cn.xuetang.modules.sys.bean;
 
+import java.util.Date;
+
 import org.nutz.dao.entity.annotation.ColDefine;
 import org.nutz.dao.entity.annotation.ColType;
 import org.nutz.dao.entity.annotation.Column;
@@ -48,8 +50,9 @@ public class Sys_task {
 	private String taskRemark;
 	@Column("user_id")
 	private long userId;
-	@Column("createTime")
-	private String create_time;
+	@Column("create_time")
+	@ColDefine(type=ColType.TIMESTAMP)
+	private Date createTime;
 	@Column("param_value")
 	private String paramValue;
 	@Column("task_interval")
@@ -158,11 +161,12 @@ public class Sys_task {
 	public void setUserId(long userId) {
 		this.userId = userId;
 	}
-	public String getCreate_time() {
-		return create_time;
+	
+	public Date getCreateTime() {
+		return createTime;
 	}
-	public void setCreate_time(String create_time) {
-		this.create_time = create_time;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 	public String getParamValue() {
 		return paramValue;
