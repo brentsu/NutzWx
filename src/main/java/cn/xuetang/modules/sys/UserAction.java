@@ -62,7 +62,7 @@ public class UserAction {
 	@Inject
 	private AppInfoService appInfoService;
 
-	@At("")
+	@At
 	@Ok("vm:template.private.sys.user")
 	public Object user(@Attr(Webs.ME) Sys_user user, HttpServletRequest req) {
 		return user.getUnitid();
@@ -165,9 +165,8 @@ public class UserAction {
 	@SuppressWarnings("rawtypes")
 	@At
 	@Ok("vm:template.private.sys.userAdd")
-	public void toadd(@Attr(Webs.ME) Sys_user user, @Param("unitid") String unitid1, HttpSession session, HttpServletRequest req) {
+	public Sys_unit toadd(@Attr(Webs.ME) Sys_user user, @Param("unitid") String unitid1, HttpSession session, HttpServletRequest req) {
 		Sys_unit unit = sysUnitService.detailByName(unitid1);
-		req.setAttribute("unit", unit);
 		Condition sql;
 		Condition sqlunit;
 		Condition sqlrole;
@@ -274,6 +273,7 @@ public class UserAction {
 			}
 		}
 		req.setAttribute("str", Json.toJson(array));
+		return unit;
 	}
 
 	@At
