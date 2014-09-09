@@ -27,7 +27,7 @@ public class PermissionCategoryService extends IdEntityService<PermissionCategor
 	}
 
 	public List<PermissionCategory> list() {
-		List<PermissionCategory> list = dao().fetch(query(Cnd.orderBy().asc("listIndex"), null));
+		List<PermissionCategory> list = dao().query(getEntityClass(),Cnd.orderBy().asc("listIndex"),null);
 		for (PermissionCategory permissionCategory : list) {
 			initPermissionCategory(permissionCategory);
 		}
