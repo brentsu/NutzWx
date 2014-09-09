@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Sha256Hash;
@@ -27,6 +26,8 @@ import org.nutz.json.Json;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Attr;
 import org.nutz.mvc.annotation.Ok;
@@ -51,6 +52,7 @@ import cn.xuetang.service.sys.SysUserService;
 @At("/private/sys/user")
 public class UserAction {
 
+	private final static Log log = Logs.get();
 	@Inject
 	private SysRoleService sysRoleService;
 	@Inject
@@ -62,9 +64,8 @@ public class UserAction {
 
 	@At("")
 	@Ok("vm:template.private.sys.user")
-	public void user(@Attr(Webs.ME) Sys_user user, HttpServletRequest req) {
-		String unitid = user.getUnitid();
-		req.setAttribute("unitid", unitid);
+	public Object user(@Attr(Webs.ME) Sys_user user, HttpServletRequest req) {
+		return user.getUnitid();
 	}
 
 	@At
@@ -81,9 +82,8 @@ public class UserAction {
 	@At
 	@Ok("raw")
 	public String tree(@Attr(Webs.ME) Sys_user user, @Param("id") String id, HttpSession session) throws Exception {
-		id = Strings.sNull(id);
 		List<Object> array = new ArrayList<Object>();
-		if ("".equals(id)) {
+		if (StringUtils.isBlank(id)) {
 			Map<String, Object> jsonroot = new HashMap<String, Object>();
 			jsonroot.put("id", "");
 			jsonroot.put("pId", "0");
@@ -100,7 +100,7 @@ public class UserAction {
 			cri.getOrderBy().asc("location");
 			cri.getOrderBy().asc("id");
 		} else {
-			if ("".equals(id)) {
+			if (StringUtils.isBlank(id)) {
 				cri.where().and("id", "=", user.getUnitid());
 				cri.getOrderBy().asc("location");
 				cri.getOrderBy().asc("id");
@@ -115,7 +115,7 @@ public class UserAction {
 		for (Sys_unit u : unitlist) {
 			String pid = u.getId().substring(0, u.getId().length() - 4);
 			int num = sysUnitService.getRowCount(Cnd.wrap("id like '" + u.getId() + "____'"));
-			if (i == 0 || "".equals(pid))
+			if (i == 0 || StringUtils.isBlank(pid))
 				pid = "0";
 			Map<String, Object> obj = new HashMap<String, Object>();
 			obj.put("id", u.getId());
@@ -140,7 +140,7 @@ public class UserAction {
 
 	@At
 	@Ok("raw")
-	public String list(@Attr(Webs.ME) Sys_user user, @Param("unitid") String unitid, @Param("page") int curPage, @Param("rows") int pageSize, @Param("SearchUserName") String SearchUserName, @Param("lock") String lock, HttpSession session) {
+	public String list(@Attr(Webs.ME) Sys_user user, @Param("unitid") String unitid, @Param("page") int curPage, @Param("rows") int pageSize, @Param("SearchUserName") String SearchUserName, @Param("lock") boolean lock, HttpSession session) {
 		Criteria cri = Cnd.cri();
 		if (StringUtils.isNotBlank(unitid)) {
 			cri.where().and("unitid", "like", unitid + "%");
@@ -151,8 +151,8 @@ public class UserAction {
 				cri.where().and("unitid", "like", user.getUnitid() + "%");
 			}
 		}
-		if ("1".equals(lock)) {
-			cri.where().and("state", "=", 1);
+		if (lock) {
+			cri.where().and("locked", "=", true);
 		}
 		if (StringUtils.isNotBlank(SearchUserName)) {
 			SqlExpressionGroup exp = Cnd.exps("loginname", "LIKE", "%" + SearchUserName + "%").or("realname", "LIKE", "%" + SearchUserName + "%");
@@ -290,22 +290,17 @@ public class UserAction {
 	@Ok("raw")
 	public boolean add(@Param("..") Sys_user user, @Param("checkids") String[] checkids, HttpServletRequest req) {
 		try {
-			String salt = "";// DecodeUtil.getSalt(6);
-			user.setPassword(Lang.digest("MD5", Strings.sNull(user.getPassword()).getBytes(), Strings.sNull(salt).getBytes(), 3));
+			RandomNumberGenerator rng = new SecureRandomNumberGenerator();
+			String salt = rng.nextBytes().toBase64();
+			String hashedPasswordBase64 = new Sha256Hash(user.getPassword(), salt, 1024).toBase64();
+			user.setPassword(hashedPasswordBase64);
 			user.setSalt(salt);
 			user.setLoginTime(Times.now());
 			if (sysUserService.insert(user)) {
-				/*
-				 * for (int i = 0; i < ids.length && (!"".equals(ids[0])); i++)
-				 * { Sys_user_role syr = new Sys_user_role();
-				 * syr.setUserid(user.getUserid());
-				 * syr.setRoleid(NumberUtils.toInt(Strings.sNull(ids[i])));
-				 * sysUserRoleService.insert(syr); }
-				 */
 				return true;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 		return false;
 	}
@@ -392,29 +387,10 @@ public class UserAction {
 
 	@At
 	public boolean update(@Param("..") Sys_user user, @Param("checkids") String checkids[], @Param("oldloginname") String oldloginname) {
-		boolean result = false;
 		try {
-			String salt = "";// DecodeUtil.getSalt(6);
-			if (!Strings.isBlank(user.getPassword())) {
-				user.setPassword(Lang.digest("MD5", Strings.sNull(user.getPassword()).getBytes(), Strings.sNull(salt).getBytes(), 3));
-				user.setSalt(salt);
-			}
 			user.setLoginTime(Times.now());
-			result = sysUserService.update(user);
-			if (result) {
-				/*
-				 * sysUserRoleService.delete("sys_user_role",
-				 * Cnd.where("userid", "=", user.getUserid())); for (int i = 0;
-				 * i < checkids.length && (!"".equals(checkids[0])); i++) {
-				 * Sys_user_role syr = new Sys_user_role();
-				 * syr.setUserid(user.getUserid());
-				 * syr.setRoleid(NumberUtils.toInt(Strings.sNull(checkids[i])));
-				 * sysUserRoleService.insert(syr); }
-				 */
-			}
-			return result;
+			return sysUserService.update(user);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return false;
 		}
 	}
@@ -426,7 +402,7 @@ public class UserAction {
 		if (result) {
 			Sql sql = Sqls.create("delete from sys_user_role where userid=@userid");
 			for (int i = 0; i < ids.length; i++) {
-				sql.params().set("userid", NumberUtils.toLong(Strings.sNull(ids[i])));
+				sql.params().set("userid", Strings.sNull(ids[i]));
 				sql.addBatch();
 			}
 			sysUserService.exeUpdateBySql(sql);
@@ -439,7 +415,7 @@ public class UserAction {
 	public boolean lock(@Param("ids") String[] ids) {
 		boolean result = true;
 		for (int i = 0; i < ids.length; i++) {
-			sysUserService.update(Chain.make("state", 1), Cnd.where("userid", "=", NumberUtils.toLong(Strings.sNull(ids[i]))));
+			sysUserService.update(Chain.make("locked", true), Cnd.where("userid", "=", Strings.sNull(ids[i])));
 		}
 		return result;
 	}
@@ -448,7 +424,7 @@ public class UserAction {
 	public boolean unlock(@Param("ids") String[] ids) {
 		boolean result = true;
 		for (int i = 0; i < ids.length; i++) {
-			sysUserService.update(Chain.make("state", 0), Cnd.where("userid", "=", NumberUtils.toLong(Strings.sNull(ids[i]))));
+			sysUserService.update(Chain.make("locked", false), Cnd.where("userid", "=", Strings.sNull(ids[i])));
 		}
 		return result;
 
@@ -460,7 +436,7 @@ public class UserAction {
 	@At
 	@Ok("vm:template.private.sys.userInfo")
 	public Sys_user info(@Attr(Webs.ME) Sys_user user) {
-		return sysUserService.fetch(user.getUserid());
+		return user;
 	}
 
 	/**
@@ -468,20 +444,20 @@ public class UserAction {
 	 */
 	@At
 	@Ok("json")
-	public Message updateInfo(@Attr(Webs.ME) Sys_user olduser, @Param("..") Sys_user user, @Param("userid") String userid, @Param("password2") String pass, @Param("oldpassword") String oldpassword, HttpServletRequest req) {
+	public Message updateInfo(@Attr(Webs.ME) Sys_user olduser, @Param("..") Sys_user user, @Param("password2") String pass, @Param("oldpassword") String oldpassword, HttpServletRequest req) {
 		if (StringUtils.isBlank(pass) || StringUtils.isBlank(oldpassword)) {
-            olduser.setRealname(user.getRealname());
-            olduser.setAvatar(user.getAvatar());
-            olduser.setDescript(user.getDescript());
-            olduser.setPozition(user.getPozition());
-            olduser.setAddress(user.getAddress());
-            olduser.setTelephone(user.getTelephone());
-            olduser.setMobile(user.getMobile());
-            olduser.setEmail(user.getEmail());
-            if (sysUserService.update(olduser)) {
-                return Message.success("common.success", req);
-            }else
-                return Message.error("common.error",req);
+			olduser.setRealname(user.getRealname());
+			olduser.setAvatar(user.getAvatar());
+			olduser.setDescript(user.getDescript());
+			olduser.setPozition(user.getPozition());
+			olduser.setAddress(user.getAddress());
+			olduser.setTelephone(user.getTelephone());
+			olduser.setMobile(user.getMobile());
+			olduser.setEmail(user.getEmail());
+			if (sysUserService.update(olduser)) {
+				return Message.success("common.success", req);
+			} else
+				return Message.error("common.error", req);
 		}
 		if (sysUserService.checkPwd(olduser, oldpassword)) {
 			RandomNumberGenerator rng = new SecureRandomNumberGenerator();
@@ -499,7 +475,7 @@ public class UserAction {
 			if (sysUserService.update(olduser)) {
 				return Message.success("common.success", req);
 			}
-		}else{
+		} else {
 			return Message.error("common.error.change.pwd.notsame", req);
 		}
 		return Message.error("common.error", req);
