@@ -53,10 +53,10 @@ public class StartSetup implements Setup {
 		try {
 			Ioc ioc = Mvcs.getIoc();
 			Dao dao = ioc.get(Dao.class);
-			dao.drop(Sys_user.class);
+			/*dao.drop(Sys_user.class);
 			dao.drop(Sys_role.class);
 			dao.drop(Sys_permission.class);
-			dao.drop(Sys_permissionCategory.class);
+			dao.drop(Sys_permissionCategory.class);*/
 			if (!dao.exists(Sys_user.class)) {
 				dao.create(Sys_user.class, false);
 				dao.create(Sys_role.class, false);
