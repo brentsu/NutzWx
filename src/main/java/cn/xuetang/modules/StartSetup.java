@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import cn.xuetang.modules.sys.bean.Sys_permission;
-import cn.xuetang.modules.sys.bean.Sys_permissionCategory;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.velocity.app.Velocity;
 import org.nutz.dao.Dao;
+import org.nutz.dao.impl.FileSqlManager;
+import org.nutz.dao.sql.Sql;
+import org.nutz.dao.util.Daos;
 import org.nutz.filepool.NutFilePool;
 import org.nutz.ioc.Ioc;
 import org.nutz.lang.Strings;
@@ -25,6 +26,8 @@ import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
 
 import cn.xuetang.common.task.LoadTask;
+import cn.xuetang.modules.sys.bean.Sys_permission;
+import cn.xuetang.modules.sys.bean.Sys_permissionCategory;
 import cn.xuetang.modules.sys.bean.Sys_role;
 import cn.xuetang.modules.sys.bean.Sys_user;
 import cn.xuetang.service.sys.AppInfoService;
@@ -53,15 +56,9 @@ public class StartSetup implements Setup {
 		try {
 			Ioc ioc = Mvcs.getIoc();
 			Dao dao = ioc.get(Dao.class);
-			/*dao.drop(Sys_user.class);
-			dao.drop(Sys_role.class);
-			dao.drop(Sys_permission.class);
-			dao.drop(Sys_permissionCategory.class);*/
+			dao.drop(Sys_user.class);
 			if (!dao.exists(Sys_user.class)) {
-				dao.create(Sys_user.class, false);
-				dao.create(Sys_role.class, false);
-				dao.create(Sys_permission.class, false);
-				dao.create(Sys_permissionCategory.class, false);
+				Daos.createTablesInPackage(dao, "cn.xuetang.modules", true);
 				final Sys_user defaultUser = new Sys_user();
 				defaultUser.setLoginname("admin");
 				defaultUser.setRealname("admin");
@@ -207,6 +204,10 @@ public class StartSetup implements Setup {
 				app(dao);
 			}
 			AppInfoService appServer = ioc.get(AppInfoService.class);
+			FileSqlManager fm = new FileSqlManager("init_mysql.sql");
+			List<Sql> sqlList = fm.createCombo(fm.keys());
+			dao.execute(sqlList.toArray(new Sql[sqlList.size()]));
+			
 			velocityInit(config.getAppRoot());
 			appServer.setAPP_BASE_PATH(Strings.sNull(config.getAppRoot()));// 项目路径
 			appServer.setAPP_BASE_NAME(Strings.sNull(config.getServletContext().getContextPath()));// 部署名

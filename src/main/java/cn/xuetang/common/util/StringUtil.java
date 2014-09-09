@@ -3,7 +3,9 @@ package cn.xuetang.common.util;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.nutz.lang.Files;
 import org.nutz.lang.Strings;
+import org.nutz.lang.util.Callback;
 
 /**
  * Created by Wizzer on 14-3-25.
@@ -187,18 +189,17 @@ public class StringUtil {
         return str;
     }
     public static void main(String[] agrs) {
-        try {
-//            ComboIocLoader loader = new ComboIocLoader(
-//                    new String[]{
-//                            "*org.nutz.ioc.loader.json.JsonLoader", "config/"}
-//            );
-//            NutIoc ioc = new NutIoc(loader);
-//            Dao dao = ioc.get(Dao.class);
-            int pageCount = (int) Math.ceil((double) 0 / 15);
-            System.out.println(pageCount);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    	final StringBuffer sb = new StringBuffer();
+    	Files.readLine(Files.findFile("D:\\workspace\\git\\NutzWx\\src\\main\\resources\\init_mysql.sql"), new Callback<String>() {
+			
+			@Override
+			public void invoke(String obj) {
+				if(StringUtils.isNotBlank(obj) &&(StringUtils.contains(obj, "/*Data for the table") || StringUtils.contains(obj, "insert  into")))
+				{
+					sb.append(obj).append("\n");
+				}
+			}
+		});
+    	Files.write("d:/init_mysql.sql", sb);
     }
 }

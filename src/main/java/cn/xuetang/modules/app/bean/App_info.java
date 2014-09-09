@@ -40,6 +40,7 @@ public class App_info {
 	@ColDefine(type = ColType.TIMESTAMP)
 	private Date accessTime;
 	@Column("access_token")
+	@ColDefine(width=1024)
 	private String accessToken;
 
 	public int getId() {
