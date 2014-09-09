@@ -288,9 +288,8 @@ public class UserAction {
 
 	@At
 	@Ok("raw")
-	public boolean add(@Param("..") Sys_user user, @Param("checkids") String checkids, HttpServletRequest req) {
+	public boolean add(@Param("..") Sys_user user, @Param("checkids") String[] checkids, HttpServletRequest req) {
 		try {
-			String[] ids = StringUtils.split(checkids, ",");
 			String salt = "";// DecodeUtil.getSalt(6);
 			user.setPassword(Lang.digest("MD5", Strings.sNull(user.getPassword()).getBytes(), Strings.sNull(salt).getBytes(), 3));
 			user.setSalt(salt);
@@ -311,7 +310,6 @@ public class UserAction {
 		return false;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@At
 	@Ok("vm:template.private.sys.userUpdate")
 	public void toupdate(@Attr(Webs.ME) Sys_user user, @Param("userid") long userid, HttpSession session, HttpServletRequest req) {
