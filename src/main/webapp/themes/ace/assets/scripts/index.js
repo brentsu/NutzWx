@@ -34,6 +34,10 @@ var Index = {
                 var url = $(this).attr("href");
                 if (url && url.indexOf("javascript") < 0 && url != "index") {
                     spinner.spin(spinContainer);
+                    $("#page_menu").find("li").each(function(){
+                        $(this).removeClass("active");
+                    });
+                    $(this).parent().addClass("active");
                     $("#page-content").load($(this).attr("href"), function () {
                         spinner.spin();
                     });
