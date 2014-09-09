@@ -34,7 +34,7 @@ public class PermissionCategory {
 	private PermissionCategory parent;
 
 	@Readonly
-	private List<PermissionCategory> children = new ArrayList<>();
+	private List<PermissionCategory> children = new ArrayList<PermissionCategory>();
 
 	@Column
 	private String name;
