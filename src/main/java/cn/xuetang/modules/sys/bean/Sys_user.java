@@ -298,4 +298,12 @@ public class Sys_user {
 	public void setProlist(List<Integer> prolist) {
 		this.prolist = prolist;
 	}
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 }

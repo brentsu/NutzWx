@@ -43,86 +43,113 @@ var Index = {
             });
         });
         //修改个人资料
-        $("#user-info").click(function(){
+        $("#user-info").click(function () {
             var form = $("<form class='form-horizontal'><label>个人资料 &nbsp;</label></form>");
-            form.load(APP_BASE+"/private/sys/user/info");
-            form.validate({
-                errorElement : 'span',
-                errorClass : 'help-block',
-                focusInvalid : false,
-                rules : {
-                    realname : {
-                        required : true
-                    },
-                    oldpassword:{
-                        required : true
-                    },
-                    password : {
-                        required : true
-                    },
-                    password2 : {
-                        required : true
-                    }
-                },
-                messages : {
-                    realname : {
-                        required : "请输入姓名"
-                    },
-                    oldpassword : {
-                        required : "请输入原密码"
-                    },
-                    password : {
-                        required : "请输入新密码"
-                    },
-                    password2 : {
-                        required : "请再输一次密码"
-                    }
-                }
-            });
+            form.load(APP_BASE + "/private/sys/user/info");
+
             var div = bootbox.dialog({
                 message: form,
                 buttons: {
-                    "cancel" : {
-                        "label" : "关闭",
-                        "className" : "btn btn-default"
+                    "cancel": {
+                        "label": "关闭",
+                        "className": "btn btn-default"
                     },
-                    "confirm" : {
-                        "label" : "确定",
-                        "className" : "btn btn-primary",
-                        "callback": function() {
-                                form.submit();
-//                            if(last_gritter) $.gritter.remove(last_gritter);
-//                            spinner.spin(spinContainer);
-//                            $.ajax({
-//                                type: "POST",
-//                                url: APP_BASE+"/private/sys/user/updateInfo",
-//                                data: form.serialize(),
-//                                dataType: "json",
-//                                success: function(data){
-//                                    spinner.spin();
-//                                    if(data.type=="success"){
-//                                        div.modal("hide");
-//                            last_gritter = $.gritter.add({
-//                                title: '操作结果',
-//                                text: '修改成功',
-//                                class_name: 'gritter-error gritter-center',
-//                                   time:600
-//                            });
-//                                    }else{
-//                            last_gritter = $.gritter.add({
-//                                title: '操作结果',
-//                                text: data.content,
-//                                class_name: 'gritter-error gritter-center',
-//                                   time:600
-//                            });
-//                                    }
-//                                }
-//                            });
+                    "confirm": {
+                        "label": "确定",
+                        "className": "btn btn-primary",
+                        "callback": function () {
+                            form.submit();
                             return false;
                         }
                     }
                 }
 
+            });
+            form.validate({
+                errorElement: 'div',
+                errorClass: 'help-block',
+                focusInvalid: false,
+                onfocusout: function (element) {
+                    $(element).valid();
+                },
+                rules: {
+                    realname: {
+                        required: true
+                    },
+                    email:{
+                        email:true
+                    }
+                },
+
+                messages: {
+                    realname: "姓名不能为空",
+                    email:"请输入正确的Email地址"
+                },
+                invalidHandler: function (event, validator) {
+                },
+                highlight: function (e) {
+                    $(e).closest('label').removeClass('has-info').addClass('has-error');
+                },
+                success: function (e) {
+                    $(e).closest('label').removeClass('has-error').addClass('has-info');
+                    $(e).remove();
+                },
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element.parent());
+                },
+                submitHandler: function (formme) {
+                    if ($('#password').val() != '' || $('#password2').val() != '') {
+                        if ($('#oldpassword').val() == '') {
+                            $("#oldpassword").closest('label').removeClass('has-info').addClass('has-error');
+                            $('<div for="oldpassword" class="help-block">请输入原密码</div>').insertAfter($("#oldpassword").parent());
+                            return false;
+                        } else if ($('#password').val() == '') {
+                            $("#password").closest('label').removeClass('has-info').addClass('has-error');
+                            $('<div for="password" class="help-block">请输入新密码</div>').insertAfter($("#password").parent());
+                            return false;
+                        } else if ($('#password2').val() == '') {
+                            $("#password2").closest('label').removeClass('has-info').addClass('has-error');
+                            $('<div for="password2" class="help-block">请再输一次新密码</div>').insertAfter($("#password2").parent());
+                            return false;
+                        } else if ($('#password').val() != $('#password2').val()) {
+                            $("#password2").closest('label').removeClass('has-info').addClass('has-error');
+                            $('<div for="password2" class="help-block">两次输入密码不一致</div>').insertAfter($("#password2").parent());
+                            return false;
+                        }
+                    }
+
+                    if (last_gritter) $.gritter.remove(last_gritter);
+                    spinner.spin(spinContainer);
+                    $.ajax({
+                        type: "POST",
+                        url: APP_BASE + "/private/sys/user/updateInfo",
+                        data: form.serialize(),
+                        dataType: "json",
+                        success: function (data) {
+                            spinner.spin();
+                            if (data.type == "success") {
+                                div.modal("hide");
+                                if($('#avatarid').val()!=''){
+                                    $('#nav-user-photo').get(0).src=$('#avatarid').val();
+                                }
+                                last_gritter = $.gritter.add({
+                                    title: '操作结果',
+                                    text: '修改成功',
+                                    class_name: 'gritter-error gritter-center',
+                                    time: 600
+                                });
+                            } else {
+                                last_gritter = $.gritter.add({
+                                    title: '操作结果',
+                                    text: data.content,
+                                    class_name: 'gritter-error gritter-center',
+                                    time: 600
+                                });
+                            }
+                        }
+                    });
+                    return false;
+                }
             });
 
         });

@@ -472,7 +472,18 @@ public class UserAction {
 	@Ok("json")
 	public Message updateInfo(@Attr(Webs.ME) Sys_user olduser, @Param("..") Sys_user user, @Param("userid") String userid, @Param("password2") String pass, @Param("oldpassword") String oldpassword, HttpServletRequest req) {
 		if (StringUtils.isBlank(pass) || StringUtils.isBlank(oldpassword)) {
-			return Message.error("common.error.change.pwd.null", req);
+            olduser.setRealname(user.getRealname());
+            olduser.setAvatar(user.getAvatar());
+            olduser.setDescript(user.getDescript());
+            olduser.setPozition(user.getPozition());
+            olduser.setAddress(user.getAddress());
+            olduser.setTelephone(user.getTelephone());
+            olduser.setMobile(user.getMobile());
+            olduser.setEmail(user.getEmail());
+            if (sysUserService.update(olduser)) {
+                return Message.success("common.success", req);
+            }else
+                return Message.error("common.error",req);
 		}
 		if (sysUserService.checkPwd(olduser, oldpassword)) {
 			RandomNumberGenerator rng = new SecureRandomNumberGenerator();

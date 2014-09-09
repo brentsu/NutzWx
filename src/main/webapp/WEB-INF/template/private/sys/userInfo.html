@@ -1,5 +1,6 @@
 <input name="userid" value="$!obj.userid" type="hidden">
 <input name="unitid" value="$!obj.unitid" type="hidden">
+<input name="avatar" id="avatarid" value="$!obj.avatar" type="hidden">
 <div class="tabbable" id="user-profile-3">
     <ul class="nav nav-tabs padding-16">
         <li class="active">
@@ -19,12 +20,15 @@
     <div class="tab-content profile-edit-tab-content">
         <div id="edit-basic" class="tab-pane in active">
             <h4 class="header blue bolder smaller">基本信息</h4>
+
             <div class="row">
                 <div class="col-xs-12 col-sm-4">
                     <span class="profile-picture">
 
-                    <img id="avatar" class="editable img-responsive editable-click editable-empty" alt="$!obj.realname的头像"
-                         src="${base}/themes/ace/assets/avatars/profile-pic.jpg"/>
+                    <img id="avatar" class="editable img-responsive editable-click editable-empty"
+                         alt="$!obj.realname的头像"
+                         #if($obj.avatar)src="$!obj.avatar" #else
+                         src="${base}/themes/ace/assets/avatars/profile-pic.jpg" #end/>
                     </span>
                 </div>
 
@@ -33,31 +37,33 @@
                 <div class="col-xs-12 col-sm-8">
                     <div class="form-group">
                         <label class="col-sm-3 control-label no-padding-right"
-                               for="form-field-username">用户名</label>
+                               for="loginname">用户名</label>
 
                         <div class="col-sm-8">
-                            <input class="col-xs-12 col-sm-10" type="text" id="form-field-username"
-                                   placeholder="Username" value="$!obj.loginname" readonly/>
+                            <input class="col-xs-12 col-sm-10" type="text" id="loginname" name="loginname"
+                                   placeholder="用户名" value="$!obj.loginname" readonly/>
                         </div>
                     </div>
 
                     <div class="space-4"></div>
 
                     <div class="form-group">
-                        <label class="col-sm-3 control-label no-padding-right" for="form-field-realname">姓名</label>
+                        <label class="col-sm-3 control-label no-padding-right" for="realname">姓名</label>
 
                         <div class="col-sm-8">
-                            <input class="col-xs-12 col-sm-10" type="text" id="form-field-realname" placeholder="Name"
+                            <label class="block clearfix">
+                            <input class="col-xs-12 col-sm-10" type="text" id="realname" name="realname" placeholder="姓名"
                                    value="$!obj.realname"/>
+                                </label>
                         </div>
                     </div>
                     <div class="space-4"></div>
 
                     <div class="form-group">
-                        <label class="col-sm-3 control-label no-padding-right" for="form-field-comment">用户描述</label>
+                        <label class="col-sm-3 control-label no-padding-right" for="descript">用户描述</label>
 
                         <div class="col-sm-8">
-                            <textarea id="form-field-comment">$!obj.descript</textarea>
+                            <textarea id="descript" name="descript">$!obj.descript</textarea>
                         </div>
                     </div>
                 </div>
@@ -67,11 +73,11 @@
             <h4 class="header blue bolder smaller">联系方式</h4>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label no-padding-right" for="form-field-email">Email</label>
+                <label class="col-sm-3 control-label no-padding-right" for="email">Email</label>
 
                 <div class="col-sm-9">
 																	<span class="input-icon input-icon-right">
-																		<input type="email" id="form-field-email"
+																		<input type="email" id="email" name="email"
                                                                                value="$!obj.email"/>
 																		<i class="icon-envelope"></i>
 																	</span>
@@ -81,12 +87,13 @@
             <div class="space-4"></div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label no-padding-right" for="form-field-phone">手机号</label>
+                <label class="col-sm-3 control-label no-padding-right" for="mobile">手机号</label>
 
                 <div class="col-sm-9">
 																	<span class="input-icon input-icon-right">
 																		<input class="input-medium input-mask-phone"
-                                                                               type="text" id="form-field-phone" value="$!obj.mobile"/>
+                                                                               type="text" id="mobile" name="mobile"
+                                                                               value="$!obj.mobile"/>
 																		<i class="icon-phone icon-flip-horizontal"></i>
 																	</span>
                 </div>
@@ -102,46 +109,56 @@
 
 
             <div class="form-group">
-                <label class="col-sm-3 control-label no-padding-right" for="form-field-pass3">原密码</label>
+                <label class="col-sm-3 control-label no-padding-right" for="oldpassword">原密码</label>
 
                 <div class="col-sm-9">
-                    <input type="password" id="form-field-pass3" name="oldpassword"/>
+                    <label class="block clearfix">
+                        <input type="password" id="oldpassword" name="oldpassword"/>
+                    </label>
                 </div>
             </div>
             <div class="space-4"></div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label no-padding-right" for="form-field-pass1">新密码</label>
+                <label class="col-sm-3 control-label no-padding-right" for="password">新密码</label>
 
                 <div class="col-sm-9">
-                    <input type="password" name="password" id="form-field-pass1"/>
+                    <label class="block clearfix">
+
+                        <input type="password" name="password" id="password"/>
+                    </label>
                 </div>
             </div>
 
             <div class="space-4"></div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label no-padding-right" for="form-field-pass2">确认新密码</label>
+                <label class="col-sm-3 control-label no-padding-right" for="password2">确认新密码</label>
+
 
                 <div class="col-sm-9">
-                    <input type="password" name="password2" id="form-field-pass2"/>
+                    <label class="block clearfix">
+                        <input type="password" name="password2" id="password2"/>
+                    </label>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
 <script language="JavaScript">
-    jQuery(function($) {
+    jQuery(function ($) {
         $.fn.editable.defaults.mode = 'inline';
         $.fn.editableform.loading = "<div class='editableform-loading'><i class='light-blue icon-2x icon-spinner icon-spin'></i></div>";
-        $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="icon-ok icon-white"></i></button>'+
+        $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="icon-ok icon-white"></i></button>' +
                 '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';
         // *** editable avatar *** //
         try {//ie8 throws some harmless exception, so let's catch it
 
             //it seems that editable plugin calls appendChild, and as Image doesn't have it, it causes errors on IE at unpredicted points
             //so let's have a fake appendChild for it!
-            if( /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()) ) Image.prototype.appendChild = function(el){}
+            if (/msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase())) Image.prototype.appendChild = function (el) {
+            }
 
             var last_gritter
             $('#avatar').editable({
@@ -162,16 +179,16 @@
                     //and a few extra ones here
                     name: 'avatar',//put the field name here as well, will be used inside the custom plugin
                     max_size: 220000,//~100Kb
-                    on_error : function(code) {//on_error function will be called when the selected file has a problem
-                        if(last_gritter) $.gritter.remove(last_gritter);
-                        if(code == 1) {//file format error
+                    on_error: function (code) {//on_error function will be called when the selected file has a problem
+                        if (last_gritter) $.gritter.remove(last_gritter);
+                        if (code == 1) {//file format error
                             last_gritter = $.gritter.add({
                                 title: '文件类型错误',
                                 text: '请选择图片文件：jpg|gif|png image!',
                                 class_name: 'gritter-error gritter-center',
-                                time:600
+                                time: 600
                             });
-                        } else if(code == 2) {//file size rror
+                        } else if (code == 2) {//file size rror
                             last_gritter = $.gritter.add({
                                 title: '图片过大',
                                 text: '请上传200Kb以内的图片',
@@ -181,11 +198,11 @@
                         else {//other error
                         }
                     },
-                    on_success : function() {
+                    on_success: function () {
                         $.gritter.removeAll();
                     }
                 },
-                url: function(params) {
+                url: function (params) {
                     // ***UPDATE AVATAR HERE*** //
                     //You can replace the contents of this function with examples/profile-avatar-update.js for actual upload
 
@@ -196,38 +213,42 @@
                     //but it may still be submitted by the plugin, because "" (empty string) is different from previous non-empty value whatever it was
                     //so we return just here to prevent problems
                     var value = $('#avatar').next().find('input[type=hidden]:eq(0)').val();
-                    if(!value || value.length == 0) {
+                    if (!value || value.length == 0) {
                         deferred.resolve();
                         return deferred.promise();
                     }
 
 
                     //dummy upload
-                    setTimeout(function(){
-                        if("FileReader" in window) {
+                    setTimeout(function () {
+                        if ("FileReader" in window) {
                             //for browsers that have a thumbnail of selected image
                             var thumb = $('#avatar').next().find('img').data('thumb');
-                            if(thumb) $('#avatar').get(0).src = thumb;
+                            if (thumb) {
+                                $('#avatar').get(0).src = thumb;
+                                $('#avatarid').val(thumb);
+                            }
                         }
 
-                        deferred.resolve({'status':'OK'});
+                        deferred.resolve({'status': 'OK'});
 
-                        if(last_gritter) $.gritter.remove(last_gritter);
+                        if (last_gritter) $.gritter.remove(last_gritter);
                         last_gritter = $.gritter.add({
                             title: '头像已更新',
                             text: '按确定进行保存',
                             class_name: 'gritter-info gritter-center'
                         });
 
-                    } , parseInt(Math.random() * 800 + 800))
+                    }, parseInt(Math.random() * 800 + 800))
 
                     return deferred.promise();
                 },
 
-                success: function(response, newValue) {
+                success: function (response, newValue) {
                 }
             })
-        }catch(e) {}
+        } catch (e) {
+        }
 
 
     });
