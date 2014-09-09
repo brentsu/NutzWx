@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -67,6 +66,7 @@ public class AppInfoService extends BaseService<App_info> {
 		}
 
 	}
+
 	public void setAPP_BASE_PATH(String aPP_BASE_PATH) {
 		app.APP_BASE_PATH = aPP_BASE_PATH;
 	}
@@ -98,6 +98,7 @@ public class AppInfoService extends BaseService<App_info> {
 	public void setFILE_POOL(FilePool fILE_POOL) {
 		app.FILE_POOL = fILE_POOL;
 	}
+
 	public String getAPP_BASE_PATH() {
 		return app.APP_BASE_PATH;
 	}
@@ -129,6 +130,7 @@ public class AppInfoService extends BaseService<App_info> {
 	public FilePool getFILE_POOL() {
 		return app.FILE_POOL;
 	}
+
 	public AppInfoService() {
 	}
 
@@ -188,26 +190,27 @@ public class AppInfoService extends BaseService<App_info> {
 	public Object getType(String type) {
 		return app.dataDictGet(type);
 	}
-	
+
 	public String getGloalsAccessToken(App_info appInfo) {
 		String access_token = "";
 		boolean resetAccesstoken = false;
 		long now = System.currentTimeMillis();
-		if (!Strings.isBlank(appInfo.getAccess_token())) {
-			long ftime = NumberUtils.toLong(Strings.sNull(appInfo.getAccess_time()));
+		if (!Strings.isBlank(appInfo.getAccessToken())) {
+			long ftime = appInfo.getAccessTime().getTime();
 			if ((now - ftime) > 7150 * 1000) {
 				resetAccesstoken = true;
 			} else {
-				access_token = Strings.sNull(appInfo.getAccess_token());
+				access_token = Strings.sNull(appInfo.getAccessToken());
 			}
 		} else
 			resetAccesstoken = true;
 		if (resetAccesstoken) {
 			access_token = WeixinUtil.getAccess_token(appInfo);
-			dao().update(getEntityClass(),Chain.make("access_time", String.valueOf(now)).add("access_token", access_token), Cnd.where("id", "=", appInfo.getId()));
+			dao().update(getEntityClass(), Chain.make("access_time", String.valueOf(now)).add("access_token", access_token), Cnd.where("id", "=", appInfo.getId()));
 		}
 		return access_token;
 	}
+
 	/**
 	 * 获取全局access_token，超过7200ms重新获取，否则返回上次值
 	 * 

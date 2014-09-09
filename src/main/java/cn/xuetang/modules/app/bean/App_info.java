@@ -1,10 +1,11 @@
 package cn.xuetang.modules.app.bean;
 
-import org.nutz.dao.DB;
+import java.util.Date;
+
+import org.nutz.dao.entity.annotation.ColDefine;
+import org.nutz.dao.entity.annotation.ColType;
 import org.nutz.dao.entity.annotation.Column;
 import org.nutz.dao.entity.annotation.Id;
-import org.nutz.dao.entity.annotation.Prev;
-import org.nutz.dao.entity.annotation.SQL;
 import org.nutz.dao.entity.annotation.Table;
 
 /**
@@ -13,9 +14,7 @@ import org.nutz.dao.entity.annotation.Table;
  */
 @Table("app_info")
 public class App_info {
-	@Column
 	@Id
-	@Prev({ @SQL(db = DB.ORACLE, value = "SELECT APP_INFO_S.nextval FROM dual") })
 	private int id;
 	@Column
 	private int pid;
@@ -23,24 +22,25 @@ public class App_info {
 	private String name;
 	@Column
 	private String token;
-	@Column
-	private String app_name;
-	@Column
-	private String app_type;
-	@Column
-	private String app_key;
-	@Column
-	private String app_secret;
+	@Column("app_name")
+	private String appName;
+	@Column("app_type")
+	private String appType;
+	@Column("app_key")
+	private String appKey;
+	@Column("app_secret")
+	private String appSecret;
 	@Column
 	private String mykey;
 	@Column
 	private String mysecret;
 	@Column
 	private String txt;
-	@Column
-	private String access_time;
-	@Column
-	private String access_token;
+	@Column("access_time")
+	@ColDefine(type = ColType.TIMESTAMP)
+	private Date accessTime;
+	@Column("access_token")
+	private String accessToken;
 
 	public int getId() {
 		return id;
@@ -74,36 +74,36 @@ public class App_info {
 		this.token = token;
 	}
 
-	public String getApp_name() {
-		return app_name;
+	public String getAppName() {
+		return appName;
 	}
 
-	public void setApp_name(String app_name) {
-		this.app_name = app_name;
+	public void setAppName(String appName) {
+		this.appName = appName;
 	}
 
-	public String getApp_type() {
-		return app_type;
+	public String getAppType() {
+		return appType;
 	}
 
-	public void setApp_type(String app_type) {
-		this.app_type = app_type;
+	public void setAppType(String appType) {
+		this.appType = appType;
 	}
 
-	public String getApp_key() {
-		return app_key;
+	public String getAppKey() {
+		return appKey;
 	}
 
-	public void setApp_key(String app_key) {
-		this.app_key = app_key;
+	public void setAppKey(String appKey) {
+		this.appKey = appKey;
 	}
 
-	public String getApp_secret() {
-		return app_secret;
+	public String getAppSecret() {
+		return appSecret;
 	}
 
-	public void setApp_secret(String app_secret) {
-		this.app_secret = app_secret;
+	public void setAppSecret(String appSecret) {
+		this.appSecret = appSecret;
 	}
 
 	public String getMykey() {
@@ -114,6 +114,14 @@ public class App_info {
 		this.mykey = mykey;
 	}
 
+	public String getMysecret() {
+		return mysecret;
+	}
+
+	public void setMysecret(String mysecret) {
+		this.mysecret = mysecret;
+	}
+
 	public String getTxt() {
 		return txt;
 	}
@@ -122,27 +130,20 @@ public class App_info {
 		this.txt = txt;
 	}
 
-	public String getAccess_time() {
-		return access_time;
+	public Date getAccessTime() {
+		return accessTime;
 	}
 
-	public void setAccess_time(String access_time) {
-		this.access_time = access_time;
+	public void setAccessTime(Date accessTime) {
+		this.accessTime = accessTime;
 	}
 
-	public String getAccess_token() {
-		return access_token;
+	public String getAccessToken() {
+		return accessToken;
 	}
 
-	public void setAccess_token(String access_token) {
-		this.access_token = access_token;
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
 	}
 
-	public String getMysecret() {
-		return mysecret;
-	}
-
-	public void setMysecret(String mysecret) {
-		this.mysecret = mysecret;
-	}
 }

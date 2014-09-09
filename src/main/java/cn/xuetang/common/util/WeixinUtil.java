@@ -163,7 +163,7 @@ public class WeixinUtil{
 	 */
 	public static String getAccess_token(App_info info) {
 		try {
-			String res = UrlUtil.getOneHtml("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + info.getApp_key() + "&secret=" + info.getApp_secret(), "UTF-8");
+			String res = UrlUtil.getOneHtml("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + info.getAppKey() + "&secret=" + info.getAppSecret(), "UTF-8");
 			Map<String, Object> map = Json.fromJson(Map.class, res);
 			return Strings.sNull(map.get("access_token"));
 		} catch (Exception e) {
