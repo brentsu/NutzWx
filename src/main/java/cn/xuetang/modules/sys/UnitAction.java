@@ -55,8 +55,7 @@ public class UnitAction {
 
 	@At
 	@Ok("raw")
-	public String tree(@Param("id") String id, HttpSession session) throws Exception {
-		Sys_user user = (Sys_user) session.getAttribute("userSession");
+	public String list(@Param("id") String id, @Attr(Webs.ME) Sys_user user) throws Exception {
 		id = Strings.sNull(id);
 		List<Map<String, Object>> array = new ArrayList<Map<String, Object>>();
 		if ("".equals(id)) {

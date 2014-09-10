@@ -97,10 +97,19 @@ public class StartSetup implements Setup {
 				per.setDescription("机构管理");
 				per.setLocked(true);
 				per.setShow(true);
-				per.setName("nutzwx:sys.user.unit");
+				per.setName("nutzwx:sys.unit");
 				per.setUrl("/private/sys/unit");
 				per.setSyspermissionCategory(perCategory);
 				pers.add(per);
+
+                per = new Sys_permission();
+                per.setDescription("机构列表");
+                per.setLocked(true);
+                per.setShow(false);
+                per.setName("nutzwx:sys.unit.list");
+                per.setUrl("/private/sys/unit/list");
+                per.setSyspermissionCategory(perCategory);
+                pers.add(per);
 
 				per = new Sys_permission();
 				per.setUrl("/private/sys/user");

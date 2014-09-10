@@ -1,25 +1,21 @@
 <div class="page-header">
     <h1>
         机构管理
-        <small>
-            <i class="icon-double-angle-right"></i>
-            添加修改单位机构
-        </small>
     </h1>
 </div><!-- /.page-header -->
 
 <div class="row">
     <div class="col-lg-12">
-        <button class="btn">
+        <button class="btn btn-sm">
             <i class="icon-pencil align-top bigger-125"></i>
             添加
         </button>
-        <button class="btn">
-            <i class="icon-pencil align-top bigger-125"></i>
+        <button class="btn btn-primary btn-sm">
+            <i class="icon-edit align-top bigger-125"></i>
             修改
         </button>
-        <button class="btn">
-            <i class="icon-pencil align-top bigger-125"></i>
+        <button class="btn btn-danger btn-sm">
+            <i class="icon-trash align-top bigger-125"></i>
             删除
         </button>
     </div>
@@ -31,14 +27,15 @@
             <div class="col-sm-6">
                 <div class="widget-box">
                     <div class="widget-header header-color-blue2">
-                        <h4 class="lighter smaller">单位列表</h4>
+                        <h5 class="lighter smaller">单位列表</h5>
                     </div>
 
-                    <div class="widget-body">
+                    <div class="profile-user-info-striped">
                         <div class="widget-main padding-8">
                             <div id="tree1" class="tree"></div>
                         </div>
                     </div>
+
                 </div>
             </div>
             <div class="col-sm-6">
@@ -46,18 +43,69 @@
 
                 <div class="widget-box">
                     <div class="widget-header header-color-green2">
-                        <h4 class="lighter smaller">单位资料</h4>
+                        <h5 class="lighter smaller">单位资料</h5>
                     </div>
 
-                    <div class="widget-body">
-                        <div class="widget-main padding-8">
-                            <div id="tree2" class="tree"></div>
+                    <div class="profile-user-info-striped">
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 单位名称</div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="name">&nbsp;</span>
+                            </div>
                         </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 机构编码</div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="unitcode">&nbsp;</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 单位地址</div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="address">&nbsp;</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 单位电话</div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="telephone">&nbsp;</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 单位邮箱</div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="email">&nbsp;</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 单位主页</div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="website">&nbsp;</span>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
             </div>
 
         </div>
         <!-- PAGE CONTENT ENDS -->
-    </div><!-- /.col -->
+    </div>
+    <!-- /.col -->
 </div><!-- /.row -->
+<script src="${base}/themes/ace/assets/js/fuelux/data/fuelux.tree-sampledata.js"></script>
+<script src="${base}/themes/ace/assets/js/fuelux/fuelux.tree.min.js"></script>
+<script src="${base}/themes/ace/assets/scripts/sys/unit.js"></script>
+
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        Unit.init();
+    });
+</script>
