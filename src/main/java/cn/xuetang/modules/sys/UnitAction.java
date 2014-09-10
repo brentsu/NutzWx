@@ -2,14 +2,14 @@ package cn.xuetang.modules.sys;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Condition;
 import org.nutz.dao.Dao;
@@ -19,17 +19,18 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Attr;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
+import org.nutz.web.Webs;
 
 import cn.xuetang.modules.sys.bean.Sys_unit;
 import cn.xuetang.modules.sys.bean.Sys_user;
 import cn.xuetang.service.sys.AppInfoService;
 import cn.xuetang.service.sys.SysUnitService;
-import org.nutz.web.Webs;
 
 /**
  * @author Wizzer.cn
@@ -49,7 +50,7 @@ public class UnitAction {
 
 	@At("")
 	@Ok("vm:template.private.sys.unit")
-	public void unit(@Attr(Webs.ME) Sys_user user,HttpServletRequest req) {
+	public void unit(@Attr(Webs.ME) Sys_user user, HttpServletRequest req) {
 
 	}
 
@@ -202,14 +203,13 @@ public class UnitAction {
 
 	@At
 	@Ok("raw")
-	public boolean sortSave(@Param("checkids") String checkids, HttpSession session) {
-		Sys_user user = (Sys_user) session.getAttribute("userSession");
-		String[] ids = StringUtils.split(checkids, ",");
+	@RequiresPermissions({ "nutzwx:sys.unit:sort.system", "nutzwx:sys.unit:sort.local" })
+	public boolean sortSave(@Attr(Webs.ME) Sys_user user, @Param("checkids") String[] checkids, HttpSession session) {
 		int initvalue = 0;
-		if (!user.isSystem()) // 判断是否为系统管理员角色
+		if (SecurityUtils.getSubject().isPermitted("nutzwx:sys.unit:sort.system")) // 判断是否为系统管理员角色
 		{
-			initvalue = sysUnitService.getIntRowValue(Sqls.create("select min(location) from sys_unit where id in " + StringUtils.split(checkids, ",")));
+			initvalue = sysUnitService.getIntRowValue(Sqls.create("select min(location) from sys_unit where id in " + Lang.array2list(checkids)));
 		}
-		return sysUnitService.updateSortRow("sys_unit", ids, "location", initvalue);
+		return sysUnitService.updateSortRow("sys_unit", checkids, "location", initvalue);
 	}
 }
