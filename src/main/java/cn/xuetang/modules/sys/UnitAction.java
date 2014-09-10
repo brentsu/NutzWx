@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Condition;
@@ -28,7 +27,6 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 import org.nutz.web.Webs;
 
-import cn.xuetang.common.config.Message;
 import cn.xuetang.modules.sys.bean.Sys_unit;
 import cn.xuetang.modules.sys.bean.Sys_user;
 import cn.xuetang.service.sys.AppInfoService;
@@ -37,7 +35,7 @@ import cn.xuetang.service.sys.SysUnitService;
 /**
  * @author Wizzer.cn
  * @time 2012-9-14 上午11:45:52
- * 
+ *
  */
 @IocBean
 @At("/private/sys/unit")
@@ -58,8 +56,11 @@ public class UnitAction {
 
 	@At
 	@Ok("raw")
-	public String list(@Param("id") String id, @Attr(Webs.ME) Sys_user user) throws Exception {
+    @RequiresPermissions({ "nutzwx:sys.unit:list.system", "nutzwx:sys.unit:list.local" })
+    public String list(@Param("id") String id, @Attr(Webs.ME) Sys_user user) throws Exception {
 		id = Strings.sNull(id);
+        boolean isSys=SecurityUtils.getSubject().isPermitted("nutzwx:sys.unit:list.system");
+        System.out.println("isSys::"+isSys);
 		List<Map<String, Object>> array = new ArrayList<Map<String, Object>>();
 		if ("".equals(id)) {
 			Map<String, Object> jsonroot = new HashMap<String, Object>();
@@ -204,14 +205,14 @@ public class UnitAction {
 	}
 
 	@At
-	@Ok("json")
-	@RequiresPermissions(value = { "nutzwx:sys.unit:sort.system", "nutzwx:sys.unit:sort.local" }, logical = Logical.OR)
-	public Message sortSave(@Attr(Webs.ME) Sys_user user, @Param("checkids") String[] checkids, HttpServletRequest req) {
+	@Ok("raw")
+	@RequiresPermissions({ "nutzwx:sys.unit:sort.system", "nutzwx:sys.unit:sort.local" })
+	public boolean sortSave(@Attr(Webs.ME) Sys_user user, @Param("checkids") String[] checkids, HttpSession session) {
 		int initvalue = 0;
 		if (SecurityUtils.getSubject().isPermitted("nutzwx:sys.unit:sort.system")) // 判断是否为系统管理员角色
 		{
 			initvalue = sysUnitService.getIntRowValue(Sqls.create("select min(location) from sys_unit where id in " + Lang.array2list(checkids)));
 		}
-		return sysUnitService.updateSortRow("sys_unit", checkids, "location", initvalue) ? Message.success("common.success", req) : Message.error("common.error", req);
+		return sysUnitService.updateSortRow("sys_unit", checkids, "location", initvalue);
 	}
 }

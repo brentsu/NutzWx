@@ -21,7 +21,7 @@ var Unit = {
         var res="";
         $.ajax({
             type: "POST",
-            url: APP_BASE + "/private/sys/unit/tree",
+            url: APP_BASE + "/private/sys/unit/list",
             data: {"id":id},
             dataType: "json",
             async:true,
