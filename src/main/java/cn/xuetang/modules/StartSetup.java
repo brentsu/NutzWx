@@ -211,11 +211,12 @@ public class StartSetup implements Setup {
 				memberCenter(dao);
 				//
 				app(dao);
+				//
+				FileSqlManager fm = new FileSqlManager("init_mysql.sql");
+				List<Sql> sqlList = fm.createCombo(fm.keys());
+				dao.execute(sqlList.toArray(new Sql[sqlList.size()]));
 			}
 			AppInfoService appServer = ioc.get(AppInfoService.class);
-			FileSqlManager fm = new FileSqlManager("init_mysql.sql");
-			List<Sql> sqlList = fm.createCombo(fm.keys());
-			dao.execute(sqlList.toArray(new Sql[sqlList.size()]));
 			
 			velocityInit(config.getAppRoot());
 			appServer.setAPP_BASE_PATH(Strings.sNull(config.getAppRoot()));// 项目路径
