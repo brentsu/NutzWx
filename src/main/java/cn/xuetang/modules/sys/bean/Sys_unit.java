@@ -17,7 +17,6 @@ import org.nutz.dao.entity.annotation.Table;
 @Table("sys_unit")
 public class Sys_unit {
 	@Name
-	@Prev(els = { @EL("uuid()") })
 	private String id;
 	@Column
 	private String name;

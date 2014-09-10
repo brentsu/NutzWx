@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import cn.xuetang.modules.sys.bean.*;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Sha256Hash;
@@ -26,10 +27,6 @@ import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
 
 import cn.xuetang.common.task.LoadTask;
-import cn.xuetang.modules.sys.bean.Sys_permission;
-import cn.xuetang.modules.sys.bean.Sys_permissionCategory;
-import cn.xuetang.modules.sys.bean.Sys_role;
-import cn.xuetang.modules.sys.bean.Sys_user;
 import cn.xuetang.service.sys.AppInfoService;
 
 /**
@@ -56,9 +53,15 @@ public class StartSetup implements Setup {
 		try {
 			Ioc ioc = Mvcs.getIoc();
 			Dao dao = ioc.get(Dao.class);
-			/*dao.drop(Sys_user.class);*/
+			dao.drop(Sys_user.class);
 			if (!dao.exists(Sys_user.class)) {
 				Daos.createTablesInPackage(dao, "cn.xuetang.modules", true);
+                final Sys_unit defaultUnit = new Sys_unit();
+                defaultUnit.setId("0001");
+                defaultUnit.setName("系统管理");
+                defaultUnit.setLocation(0);
+                dao.insert(defaultUnit);
+
 				final Sys_user defaultUser = new Sys_user();
 				defaultUser.setLoginname("admin");
 				defaultUser.setRealname("admin");
@@ -68,6 +71,7 @@ public class StartSetup implements Setup {
 				defaultUser.setPassword(hashedPasswordBase64);
 				defaultUser.setSalt(salt);
 				defaultUser.setLoginTime(Times.now());
+                defaultUser.setUnitid("0001");
 				// dao.insert(defaultUser);
 				/**
 				 * 全部权限 *:*:* 添加账号 sys:user.add 更新账号 sys:user.update 删除账号
