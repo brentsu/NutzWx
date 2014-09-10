@@ -22,7 +22,7 @@ public class SysRoleService extends BaseService<Sys_role> {
 	}
 
 	public List<String> getPermissionNameList(Sys_role role) {
-		dao().fetchLinks(role, "permissions");
+		dao().fetchLinks(role, "syspermissions");
 		List<String> permissionNameList = new ArrayList<String>();
 		if (!Lang.isEmpty(role.getSyspermissions())) {
 			for (Sys_permission syspermission : role.getSyspermissions()) {
