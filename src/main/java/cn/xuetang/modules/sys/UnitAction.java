@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Condition;
@@ -27,6 +28,7 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 import org.nutz.web.Webs;
 
+import cn.xuetang.common.config.Message;
 import cn.xuetang.modules.sys.bean.Sys_unit;
 import cn.xuetang.modules.sys.bean.Sys_user;
 import cn.xuetang.service.sys.AppInfoService;
@@ -202,14 +204,14 @@ public class UnitAction {
 	}
 
 	@At
-	@Ok("raw")
-	@RequiresPermissions({ "nutzwx:sys.unit:sort.system", "nutzwx:sys.unit:sort.local" })
-	public boolean sortSave(@Attr(Webs.ME) Sys_user user, @Param("checkids") String[] checkids, HttpSession session) {
+	@Ok("json")
+	@RequiresPermissions(value = { "nutzwx:sys.unit:sort.system", "nutzwx:sys.unit:sort.local" }, logical = Logical.OR)
+	public Message sortSave(@Attr(Webs.ME) Sys_user user, @Param("checkids") String[] checkids, HttpServletRequest req) {
 		int initvalue = 0;
 		if (SecurityUtils.getSubject().isPermitted("nutzwx:sys.unit:sort.system")) // 判断是否为系统管理员角色
 		{
 			initvalue = sysUnitService.getIntRowValue(Sqls.create("select min(location) from sys_unit where id in " + Lang.array2list(checkids)));
 		}
-		return sysUnitService.updateSortRow("sys_unit", checkids, "location", initvalue);
+		return sysUnitService.updateSortRow("sys_unit", checkids, "location", initvalue) ? Message.success("common.success", req) : Message.error("common.error", req);
 	}
 }
