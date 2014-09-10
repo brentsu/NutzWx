@@ -1,11 +1,20 @@
 package cn.xuetang.common.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.nutz.http.Request;
+import org.nutz.http.Sender;
+import org.nutz.json.Json;
+import org.nutz.json.JsonFormat;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
-public class SendUtil extends Thread{
+import cn.xuetang.modules.user.bean.User_score;
 
-	private  final static Log log = Logs.get();
+public class SendUtil extends Thread {
+
+	private final static Log log = Logs.get();
 	private String type;
 	private String url;
 	private String key;
@@ -24,4 +33,12 @@ public class SendUtil extends Thread{
 		}
 	}
 
+	public static void main(String[] args) {
+		List<User_score> list = new ArrayList<>();
+		list.add(new User_score(1, 1, 1, 1));
+		list.add(new User_score(2, 2, 2, 2));
+		Request request = Request.post("http://192.168.1.13:8080/nutz_wx/user/question");
+		request.setData(Json.toJson(list,JsonFormat.compact()));
+		Sender.create(request).setTimeout(3000).send();
+	}
 }

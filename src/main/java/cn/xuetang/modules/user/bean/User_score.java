@@ -19,6 +19,18 @@ public class User_score {
 	@Column
 	private int b_score;
 
+	public User_score(){
+		
+	}
+	
+	public User_score(int uid, int score, int p_score, int b_score) {
+		super();
+		this.uid = uid;
+		this.score = score;
+		this.p_score = p_score;
+		this.b_score = b_score;
+	}
+
 	public int getUid() {
 		return uid;
 	}

@@ -3,6 +3,7 @@ package cn.xuetang.modules.user;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,8 @@ import org.nutz.lang.Encoding;
 import org.nutz.lang.Files;
 import org.nutz.lang.stream.NullInputStream;
 import org.nutz.mvc.View;
+import org.nutz.mvc.adaptor.JsonAdaptor;
+import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.Ok;
@@ -38,6 +41,7 @@ import org.nutz.mvc.view.ServerRedirectView;
 import org.nutz.mvc.view.ViewWrapper;
 
 import cn.xuetang.common.shiro.realm.OAuthToken;
+import cn.xuetang.modules.user.bean.User_score;
 
 @IocBean(create = "init")
 @At("/user")
@@ -129,4 +133,10 @@ public class OauthLoginAct {
 		this.config = config;
 	}
 
+	@At
+	@AdaptBy(type = JsonAdaptor.class)
+	@Ok("void")
+	public void question(List<User_score> list) {
+		System.out.println(list);
+	}
 }
