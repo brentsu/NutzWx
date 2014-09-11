@@ -16,10 +16,22 @@
             <i class="icon-edit align-top bigger-125"></i>
             修改
         </button>
-        <button class="btn btn-danger btn-sm">
+        <button id="btnDel" class="btn btn-danger btn-sm">
             <i class="icon-trash align-top bigger-125"></i>
             删除
         </button>
+        <div id="dialogDel" class="hide">
+            <div class="alert alert-info bigger-110">
+               此操作将级联删除下级单位、用户、角色。
+            </div>
+
+            <div class="space-6"></div>
+
+            <p class="bigger-110 bolder center grey">
+                <i class="icon-hand-right blue bigger-120"></i>
+                确定删除？
+            </p>
+        </div>
     </div>
     <div class="col-xs-12">
         <!-- PAGE CONTENT BEGINS -->
@@ -47,7 +59,7 @@
                     <div class="widget-header header-color-green2">
                         <h5 class="lighter smaller">单位资料</h5>
                     </div>
-
+                    <input type="hidden" id="unitid" value="">
                     <div class="profile-user-info-striped">
                         <div class="profile-info-row">
                             <div class="profile-info-name"> 单位名称</div>
@@ -110,8 +122,8 @@
     <!-- /.col -->
 </div><!-- /.row -->
 
-<script type="text/javascript"
-        src="${base}/themes/ace/assets/js/ztree/jquery.ztree.core-3.5.min.js"></script>
+<script src="${base}/themes/ace/assets/js/ztree/jquery.ztree.core-3.5.min.js"></script>
+
 <script src="${base}/themes/ace/assets/scripts/sys/unit.js"></script>
 
 <script type="text/javascript">

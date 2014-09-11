@@ -27,7 +27,7 @@
 
                     <img id="avatar" class="editable img-responsive editable-click editable-empty"
                          alt="$!obj.realname的头像"
-                         #if($obj.avatar)src="$!obj.avatar" #else
+                         #if("$!obj.avatar"!="")src="$!obj.avatar" #else
                          src="${base}/themes/ace/assets/avatars/profile-pic.jpg" #end/>
                     </span>
                 </div>
