@@ -237,7 +237,7 @@
 #if($shiro.isUser())
 <li class="light-blue">
     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-        <img class="nav-user-photo" id="nav-user-photo" #if($shiro.getPrincipal().getAvatar())src="$shiro.getPrincipal().getAvatar()" #else
+        <img class="nav-user-photo" id="nav-user-photo" #if("$!shiro.getPrincipal().getAvatar()"!="")src="$!shiro.getPrincipal().getAvatar()" #else
         src="${base}/themes/ace/assets/avatars/profile-pic.jpg" #end alt="$shiro.getPrincipal().getRealname()" />
 		<span class="user-info"><small>欢迎光临,</small>$shiro.getPrincipal().getLoginname() </span>
         <i class="icon-caret-down"></i>
