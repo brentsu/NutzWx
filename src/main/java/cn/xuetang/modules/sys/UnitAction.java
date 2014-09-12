@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import cn.xuetang.common.config.Message;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -111,31 +112,32 @@ public class UnitAction {
     }
 
     @At
-    @Ok("raw")
-    public String addSave(@Param("..") Sys_unit unit) {
+    @Ok("json")
+    public Message addSave(@Param("..") Sys_unit unit, HttpServletRequest req) {
         String id = sysUnitService.getSubMenuId("sys_unit", "id", Strings.sNull(unit.getId()));
         unit.setId(id);
         int location = sysUnitService.getIntRowValue(Sqls.create("select max(location) from sys_unit"));
-        unit.setLocation(location);
+        unit.setLocation(location + 1);
         if (!sysUnitService.insert(unit))
-            return "";
-        return id;
+            return Message.success("common.error", req);
+        return Message.success("common.success", req);
     }
 
     @At
-    @Ok("raw")
-    public boolean del(@Param("id") String id) {
+    @Ok("json")
+    public Message del(@Param("id") String id, HttpServletRequest req) {
         boolean res;
         Sql sql = Sqls.create("delete from sys_unit where id like @id");
         sql.params().set("id", id + "%");
         res = sysUnitService.exeUpdateBySql(sql);
         if (res) {
-            sysUnitService.exeUpdateBySql(Sqls.create("delete from sys_role_resource where roleid in(" + "select id from sys_role where unitid like '" + id + "%')"));
             sysUnitService.exeUpdateBySql(Sqls.create("delete from sys_user_role where userid in(" + "select userid from sys_user where unitid like '" + id + "%')"));
             sysUnitService.exeUpdateBySql(Sqls.create("delete from sys_user where unitid like '" + id + "%'"));
             sysUnitService.exeUpdateBySql(Sqls.create("delete from sys_role where unitid like '" + id + "%'"));
+            return Message.success("common.success", req);
+        } else {
+            return Message.error("common.error", req);
         }
-        return res;
     }
 
     @At

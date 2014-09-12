@@ -55,7 +55,7 @@ var Index = {
                 message: form,
                 buttons: {
                     "cancel": {
-                        "label": "关闭",
+                        "label": "取消",
                         "className": "btn btn-default"
                     },
                     "confirm": {
