@@ -53,7 +53,7 @@ public class StartSetup implements Setup {
 		try {
 			Ioc ioc = Mvcs.getIoc();
 			Dao dao = ioc.get(Dao.class);
-			dao.drop(Sys_user.class);
+			/*dao.drop(Sys_user.class);*/
 			if (!dao.exists(Sys_user.class)) {
 				Daos.createTablesInPackage(dao, "cn.xuetang.modules", true);
                 final Sys_unit defaultUnit = new Sys_unit();
