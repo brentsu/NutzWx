@@ -112,15 +112,12 @@ public class UnitAction {
     }
 
     @At
-    @Ok("json")
-    public Message addSave(@Param("..") Sys_unit unit, HttpServletRequest req) {
+    public boolean addSave(@Param("..") Sys_unit unit, HttpServletRequest req) {
         String id = sysUnitService.getSubMenuId("sys_unit", "id", Strings.sNull(unit.getId()));
         unit.setId(id);
         int location = sysUnitService.getIntRowValue(Sqls.create("select max(location) from sys_unit"));
         unit.setLocation(location + 1);
-        if (!sysUnitService.insert(unit))
-            return Message.success("common.error", req);
-        return Message.success("common.success", req);
+        return sysUnitService.insert(unit);
     }
 
     @At
@@ -142,16 +139,13 @@ public class UnitAction {
 
     @At
     @Ok("vm:template.private.sys.unitUpdate")
-    public void update(@Param("id") String id, HttpServletRequest req) {
-        Sys_unit unit = sysUnitService.detailByName(id);
-        req.setAttribute("obj", unit);
+    public Sys_unit update(@Param("id") String id, HttpServletRequest req) {
+           return sysUnitService.detailByName(id);
     }
 
     @At
-    @Ok("raw")
-    public String updateSave(@Param("..") Sys_unit unit) {
-        return sysUnitService.update(unit) ? unit.getId() : "";
-
+    public boolean updateSave(@Param("..") Sys_unit unit) {
+        return sysUnitService.update(unit);
     }
 
     @At

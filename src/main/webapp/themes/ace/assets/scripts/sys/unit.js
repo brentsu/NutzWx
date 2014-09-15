@@ -55,9 +55,9 @@ var Unit = {
             }
         }));
         //添加
-        $("#btnAdd").on('click',function(e){
+        $("#btnAdd").on('click', function (e) {
             var form = $("<form class='form-horizontal'><label>单位资料 &nbsp;</label></form>");
-            form.load(APP_BASE + "/private/sys/unit/add?id="+$('#unitid').val());
+            form.load(APP_BASE + "/private/sys/unit/add?id=" + $('#unitid').val());
             var div = bootbox.dialog({
                 message: form,
                 buttons: {
@@ -87,14 +87,14 @@ var Unit = {
                     name: {
                         required: true
                     },
-                    email:{
-                        email:true
+                    email: {
+                        email: true
                     }
                 },
 
                 messages: {
                     name: "单位名称不能为空",
-                    email:"请输入正确的Email地址"
+                    email: "请输入正确的Email地址"
                 },
                 invalidHandler: function (event, validator) {
                 },
@@ -117,9 +117,9 @@ var Unit = {
                         dataType: "json",
                         success: function (data) {
                             spinner.spin();
-                            if (data.type == "success") {
+                            if (data) {
                                 div.modal("hide");
-                                 $.gritter.add({
+                                $.gritter.add({
                                     title: '操作结果',
                                     text: '添加成功',
                                     class_name: 'gritter-error gritter-center',
@@ -127,9 +127,96 @@ var Unit = {
                                 });
                                 Unit.initTree();
                             } else {
-                                 $.gritter.add({
+                                $.gritter.add({
                                     title: '操作结果',
-                                    text:  '添加失败',
+                                    text: '添加失败',
+                                    class_name: 'gritter-error gritter-center',
+                                    time: 600
+                                });
+                            }
+                        }
+                    });
+                    return false;
+                }
+            });
+
+        });
+        //修改
+        $("#btnUpdate").on('click', function (e) {
+            var form = $("<form class='form-horizontal'><label>单位资料 &nbsp;</label></form>");
+            form.load(APP_BASE + "/private/sys/unit/update?id=" + $('#unitid').val());
+            var div = bootbox.dialog({
+                message: form,
+                buttons: {
+                    "cancel": {
+                        "label": "取消",
+                        "className": "btn btn-default"
+                    },
+                    "confirm": {
+                        "label": "确定",
+                        "className": "btn btn-primary",
+                        "callback": function () {
+                            form.submit();
+                            return false;
+                        }
+                    }
+                }
+
+            });
+            form.validate({
+                errorElement: 'div',
+                errorClass: 'help-block',
+                focusInvalid: false,
+                onfocusout: function (element) {
+                    $(element).valid();
+                },
+                rules: {
+                    name: {
+                        required: true
+                    },
+                    email: {
+                        email: true
+                    }
+                },
+
+                messages: {
+                    name: "单位名称不能为空",
+                    email: "请输入正确的Email地址"
+                },
+                invalidHandler: function (event, validator) {
+                },
+                highlight: function (e) {
+                    $(e).closest('label').removeClass('has-info').addClass('has-error');
+                },
+                success: function (e) {
+                    $(e).closest('label').removeClass('has-error').addClass('has-info');
+                    $(e).remove();
+                },
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element.parent());
+                },
+                submitHandler: function (formme) {
+                    spinner.spin(spinContainer);
+                    $.ajax({
+                        type: "POST",
+                        url: APP_BASE + "/private/sys/unit/updateSave",
+                        data: form.serialize(),
+                        dataType: "json",
+                        success: function (data) {
+                            spinner.spin();
+                            if (data) {
+                                div.modal("hide");
+                                $.gritter.add({
+                                    title: '操作结果',
+                                    text: '修改成功',
+                                    class_name: 'gritter-error gritter-center',
+                                    time: 600
+                                });
+                                Unit.initTree();
+                            } else {
+                                $.gritter.add({
+                                    title: '操作结果',
+                                    text: '修改失败',
                                     class_name: 'gritter-error gritter-center',
                                     time: 600
                                 });
@@ -173,7 +260,7 @@ var Unit = {
                         "class": "btn btn-danger btn-xs",
                         click: function () {
                             spinner.spin(spinContainer);
-                            var $t=$(this);
+                            var $t = $(this);
                             $.ajax({
                                 type: "POST",
                                 url: APP_BASE + "/private/sys/unit/del",
@@ -181,7 +268,7 @@ var Unit = {
                                 dataType: "json",
                                 success: function (data) {
                                     spinner.spin();
-                                    if ("success" == data.type) {
+                                    if ("true" == data) {
                                         $t.dialog("close");
                                         $.gritter.add({
                                             title: '提示',
@@ -245,7 +332,7 @@ var Unit = {
                 });
                 //赋值
                 $.each(data, function (index, value) {
-                    if(value=="")
+                    if (value == "")
                         return;
                     if ($('#' + index).prop('tagName') == "INPUT") {
                         $('#' + index).val(value);
