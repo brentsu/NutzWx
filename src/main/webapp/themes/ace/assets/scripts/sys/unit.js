@@ -143,6 +143,15 @@ var Unit = {
         });
         //修改
         $("#btnUpdate").on('click', function (e) {
+            if ('' == $('#unitid').val()) {
+                $.gritter.add({
+                    title: '提示',
+                    text: '请选择一个单位',
+                    class_name: 'gritter-error gritter-center',
+                    time: 600
+                });
+                return false;
+            }
             var form = $("<form class='form-horizontal'><label>单位资料 &nbsp;</label></form>");
             form.load(APP_BASE + "/private/sys/unit/update?id=" + $('#unitid').val());
             var div = bootbox.dialog({
