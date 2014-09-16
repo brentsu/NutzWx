@@ -27,7 +27,7 @@
     #set ($allcount =0 )
     #foreach($menu in $obj)
     <div class="lmitem png"  id="topmenuid$!velocityCount">
-        <a href="javascript:;" onclick="tourl('$!menu.id','$!menu.url','$!menu.name');viewsub('$!velocityCount');dochangeClass($!velocityCount);">$!menu.name</a>
+        <a href="javascript:;" onclick="tourl('$!menu.id','${base}$!menu.url','$!menu.name');viewsub('$!velocityCount');dochangeClass($!velocityCount);">$!menu.name</a>
     </div>
     <div id="menudiv$!velocityCount" style="display:none">
         <div class="lmitem_xm png">
@@ -35,7 +35,7 @@
                 #foreach($submenu in $obj.get($!menu.id))
                 #set ( $allcount =$allcount+1 )
                 <li>
-                    <a href="javascript:dosuburl('$!allcount','$!submenu.id','$!submenu.url','$!submenu.name');dochangeSubClass('$!velocityCount');" id=selectID$!velocityCount  title="$!submenu.name">
+                    <a href="javascript:dosuburl('$!allcount','$!submenu.id','${base}$!submenu.url','$!submenu.name');dochangeSubClass('$!velocityCount');" id=selectID$!velocityCount  title="$!submenu.name">
                         #if($!{submenu.name.toString().length()} > 10)
                         $!{submenu.name.toString().substring(0,10)}..
                         #else

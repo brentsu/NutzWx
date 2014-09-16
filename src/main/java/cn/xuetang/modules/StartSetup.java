@@ -102,7 +102,7 @@ public class StartSetup implements Setup {
 				per.setLocked(true);
 				per.setShow(true);
 				per.setName("nutzwx:sys.unit");
-				per.setUrl("/private/sys/unit");
+				per.setUrl("sys/unit");
 				per.setSyspermissionCategory(perCategory);
 				pers.add(per);
 
@@ -111,12 +111,12 @@ public class StartSetup implements Setup {
                 per.setLocked(true);
                 per.setShow(false);
                 per.setName("nutzwx:sys.unit.list");
-                per.setUrl("/private/sys/unit/list");
+                per.setUrl("sys/unit/list");
                 per.setSyspermissionCategory(perCategory);
                 pers.add(per);
 
 				per = new Sys_permission();
-				per.setUrl("/private/sys/user");
+				per.setUrl("sys/user");
 				per.setStyle("fa fa-users");
 				per.setShow(true);
 				per.setDescription("用户管理");
@@ -126,7 +126,7 @@ public class StartSetup implements Setup {
 				pers.add(per);
 
 				per = new Sys_permission();
-				per.setUrl("/private/sys/role");
+				per.setUrl("sys/role");
 				per.setStyle("fa fa-user");
 				per.setShow(true);
 				per.setDescription("角色管理");
@@ -136,7 +136,7 @@ public class StartSetup implements Setup {
 				pers.add(per);
 
 				per = new Sys_permission();
-				per.setUrl("/private/sys/res");
+				per.setUrl("sys/res");
 				per.setStyle("fa fa-user");
 				per.setShow(true);
 				per.setDescription("资源管理");
@@ -146,7 +146,7 @@ public class StartSetup implements Setup {
 				pers.add(per);
 
 				per = new Sys_permission();
-				per.setUrl("/private/sys/config");
+				per.setUrl("sys/config");
 				per.setStyle("fa fa-user");
 				per.setShow(true);
 				per.setDescription("参数配置");
@@ -156,7 +156,7 @@ public class StartSetup implements Setup {
 				pers.add(per);
 
 				per = new Sys_permission();
-				per.setUrl("/private/sys/dict");
+				per.setUrl("sys/dict");
 				per.setStyle("fa fa-user");
 				per.setShow(true);
 				per.setDescription("数字字典");
@@ -166,7 +166,7 @@ public class StartSetup implements Setup {
 				pers.add(per);
 
 				per = new Sys_permission();
-				per.setUrl("/private/sys/task");
+				per.setUrl("sys/task");
 				per.setStyle("fa fa-user");
 				per.setShow(true);
 				per.setDescription("定时任务");
@@ -176,7 +176,7 @@ public class StartSetup implements Setup {
 				pers.add(per);
 
 				per = new Sys_permission();
-				per.setUrl("/private/sys/safe");
+				per.setUrl("sys/safe");
 				per.setShow(true);
 				per.setDescription("访问控制");
 				per.setLocked(true);
@@ -185,7 +185,7 @@ public class StartSetup implements Setup {
 				pers.add(per);
 
 				per = new Sys_permission();
-				per.setUrl("/private/sys/user/log");
+				per.setUrl("sys/user/log");
 				per.setShow(true);
 				per.setDescription("登陆日志");
 				per.setLocked(true);
@@ -248,7 +248,7 @@ public class StartSetup implements Setup {
 		perCategory.setSyspermissions(pers);
 
 		Sys_permission allPerm = new Sys_permission();
-		allPerm.setUrl("/private/app/project");
+		allPerm.setUrl("app/project");
 		allPerm.setShow(true);
 		allPerm.setDescription("项目管理");
 		allPerm.setLocked(true);
@@ -257,7 +257,7 @@ public class StartSetup implements Setup {
 		pers.add(allPerm);
 
 		Sys_permission per = new Sys_permission();
-		per.setUrl("/private/app/info");
+		per.setUrl("app/info");
 		per.setShow(true);
 		per.setDescription("接口管理");
 		per.setLocked(true);
@@ -278,7 +278,7 @@ public class StartSetup implements Setup {
         perCategory.setSyspermissions(pers);
 
 		Sys_permission allPerm = new Sys_permission();
-		allPerm.setUrl("/private/user/info");
+		allPerm.setUrl("user/info");
 		allPerm.setShow(true);
 		allPerm.setDescription("会员资料");
 		allPerm.setLocked(true);
@@ -287,7 +287,7 @@ public class StartSetup implements Setup {
 		pers.add(allPerm);
 
 		Sys_permission per = new Sys_permission();
-		per.setUrl("/private/user/score");
+		per.setUrl("user/score");
 		per.setShow(true);
 		per.setDescription("会员积分");
 		per.setLocked(true);
@@ -296,7 +296,7 @@ public class StartSetup implements Setup {
 		pers.add(per);
 
 		per = new Sys_permission();
-		per.setUrl("/private/user/connwx");
+		per.setUrl("user/connwx");
 		per.setShow(true);
 		per.setDescription("微信帐号");
 		per.setLocked(true);
@@ -317,7 +317,7 @@ public class StartSetup implements Setup {
 		perCategory.setSyspermissions(pers);
 
 		Sys_permission allPerm = new Sys_permission();
-		allPerm.setUrl("/private/wx/content");
+		allPerm.setUrl("wx/content");
 		allPerm.setShow(true);
 		allPerm.setDescription("文章管理");
 		allPerm.setLocked(true);
@@ -326,7 +326,7 @@ public class StartSetup implements Setup {
 		pers.add(allPerm);
 
 		Sys_permission per = new Sys_permission();
-		per.setUrl("/private/wx/channel");
+		per.setUrl("wx/channel");
 		per.setShow(true);
 		per.setDescription("栏目管理");
 		per.setLocked(true);
@@ -347,7 +347,7 @@ public class StartSetup implements Setup {
 		perCategory.setSyspermissions(pers);
 
 		Sys_permission allPerm = new Sys_permission();
-		allPerm.setUrl("/private/wx/txt");
+		allPerm.setUrl("wx/txt");
 		allPerm.setShow(true);
 		allPerm.setDescription("微信回复");
 		allPerm.setLocked(true);
@@ -364,7 +364,7 @@ public class StartSetup implements Setup {
 		pers.add(per);
 
 		per = new Sys_permission();
-		per.setUrl("/private/wx/push");
+		per.setUrl("wx/push");
 		per.setShow(true);
 		per.setDescription("高级群发");
 		per.setLocked(true);
@@ -373,7 +373,7 @@ public class StartSetup implements Setup {
 		pers.add(per);
 
 		per = new Sys_permission();
-		per.setUrl("/private/wx/image");
+		per.setUrl("wx/image");
 		per.setShow(true);
 		per.setDescription("微信相册");
 		per.setLocked(true);
@@ -382,7 +382,7 @@ public class StartSetup implements Setup {
 		pers.add(per);
 
 		per = new Sys_permission();
-		per.setUrl("/private/wx/video");
+		per.setUrl("wx/video");
 		per.setShow(true);
 		per.setDescription("微信视频");
 		per.setLocked(true);
