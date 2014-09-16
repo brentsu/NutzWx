@@ -98,7 +98,7 @@ public class ConfigAction {
 	@At
 	@Ok("raw")
 	public String list(String contion) {
-		return sysConfigService.listForDataTable(contion, Sys_config.class);
+		return sysConfigService.listForDataTable(contion);
 	}
 
 }

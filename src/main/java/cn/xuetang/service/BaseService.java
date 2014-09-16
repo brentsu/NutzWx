@@ -337,7 +337,7 @@ public class BaseService<T> extends IdEntityService<T> {
      * 查询DataTable数据
      * @return
      */
-    public String listForDataTable(String contion,Class c1) {
+    public String listForDataTable(String contion) {
 		//获取页面参数
 		DataTableInput dataTableInput = DataTableUtil.getInput4Contion(contion);
 		//根据取出的对象生成查询条件
@@ -345,11 +345,11 @@ public class BaseService<T> extends IdEntityService<T> {
 		int pageNo = dataTableInput.getiDisplayStart();//页数
 		int pageCount = dataTableInput.getiDisplayLength();//每页的数量
 		Pager pager = dao().createPager(pageNo/pageCount+1, pageCount);
-		List<T> result =  dao().query(c1, cri,pager);
+		List<T> result =  dao().query(getEntityClass(), cri,pager);
 		DataTableReturn dataTableBase = new DataTableReturn();
 		dataTableBase.setsEcho(dataTableInput.getsEcho());
-		dataTableBase.setiTotalDisplayRecords(dao().count(c1,cri));
-		dataTableBase.setiTotalRecords(dao().count(c1));
+		dataTableBase.setiTotalDisplayRecords(dao().count(getEntityClass(),cri));
+		dataTableBase.setiTotalRecords(dao().count(getEntityClass()));
 		dataTableBase.setAaData(result);		
         return Json.toJson(dataTableBase);
     }
