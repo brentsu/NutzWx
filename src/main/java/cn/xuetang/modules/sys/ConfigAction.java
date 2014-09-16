@@ -1,7 +1,5 @@
 package cn.xuetang.modules.sys;
 
-import org.nutz.dao.Cnd;
-import org.nutz.dao.sql.Criteria;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
