@@ -34,7 +34,7 @@ public class SendUtil extends Thread {
 	}
 
 	public static void main(String[] args) {
-		List<User_score> list = new ArrayList<>();
+		List<User_score> list = new ArrayList<User_score>();
 		list.add(new User_score(1, 1, 1, 1));
 		list.add(new User_score(2, 2, 2, 2));
 		Request request = Request.post("http://192.168.1.13:8080/nutz_wx/user/question");

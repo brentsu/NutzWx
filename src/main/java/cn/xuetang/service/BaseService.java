@@ -14,6 +14,7 @@ import org.nutz.dao.QueryResult;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Entity;
 import org.nutz.dao.pager.Pager;
+import org.nutz.dao.sql.Criteria;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.sql.SqlCallback;
 import org.nutz.json.Json;
@@ -21,6 +22,10 @@ import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.service.IdEntityService;
+
+import cn.xuetang.common.dataTable.DataTableReturn;
+import cn.xuetang.common.dataTable.DataTableInput;
+import cn.xuetang.common.dataTable.DataTableUtil;
 
 import cn.xuetang.common.util.DBObject;
 
@@ -327,5 +332,25 @@ public class BaseService<T> extends IdEntityService<T> {
         sql.setCallback(Sqls.callback.records());
         dao().execute(sql);
         return sql.getList(Map.class);
+    }
+    /**
+     * 查询DataTable数据
+     * @return
+     */
+    public String listForDataTable(String contion,Class c1) {
+		//获取页面参数
+		DataTableInput dataTableInput = DataTableUtil.getInput4Contion(contion);
+		//根据取出的对象生成查询条件
+		Criteria cri = DataTableUtil.createContion(dataTableInput,0);
+		int pageNo = dataTableInput.getiDisplayStart();//页数
+		int pageCount = dataTableInput.getiDisplayLength();//每页的数量
+		Pager pager = dao().createPager(pageNo/pageCount+1, pageCount);
+		List<T> result =  dao().query(c1, cri,pager);
+		DataTableReturn dataTableBase = new DataTableReturn();
+		dataTableBase.setsEcho(dataTableInput.getsEcho());
+		dataTableBase.setiTotalDisplayRecords(dao().count(c1,cri));
+		dataTableBase.setiTotalRecords(dao().count(c1));
+		dataTableBase.setAaData(result);		
+        return Json.toJson(dataTableBase);
     }
 }

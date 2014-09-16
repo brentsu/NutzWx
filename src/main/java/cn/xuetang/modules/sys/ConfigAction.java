@@ -97,10 +97,8 @@ public class ConfigAction {
 
 	@At
 	@Ok("raw")
-	public String list(@Param("page") int curPage, @Param("rows") int pageSize) {
-		Criteria cri = Cnd.cri();
-		cri.getOrderBy().desc("id");
-		return sysConfigService.listPageJson(curPage, pageSize, cri);
+	public String list(String contion) {
+		return sysConfigService.listForDataTable(contion, Sys_config.class);
 	}
 
 }
