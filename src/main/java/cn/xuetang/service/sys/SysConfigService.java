@@ -11,7 +11,7 @@ public class SysConfigService extends BaseService<Sys_config> {
 
 	public SysConfigService() {
 	}
-	
+
 	public SysConfigService(Dao dao) {
 		super(dao);
 	}

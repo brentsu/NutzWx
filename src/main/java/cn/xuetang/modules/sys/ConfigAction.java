@@ -2,11 +2,13 @@ package cn.xuetang.modules.sys;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.json.Json;
 import org.nutz.lang.Strings;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 
+import cn.xuetang.common.page.PageProperties;
 import cn.xuetang.common.util.SyncUtil;
 import cn.xuetang.modules.sys.bean.Sys_config;
 import cn.xuetang.service.sys.AppInfoService;
@@ -45,7 +47,7 @@ public class ConfigAction {
 			appInfoService.InitSysConfig();
 			String urls = Strings.sNull(appInfoService.getSYS_CONFIG().get("sync_url"));
 			String key = Strings.sNull(appInfoService.getSYS_CONFIG().get("sync_key"));
-			SyncUtil.sendMsg("sysconfig",urls,key);
+			SyncUtil.sendMsg("sysconfig", urls, key);
 			return true;
 		} else
 			return false;
@@ -63,7 +65,7 @@ public class ConfigAction {
 			appInfoService.InitSysConfig();
 			String urls = Strings.sNull(appInfoService.getSYS_CONFIG().get("sync_url"));
 			String key = Strings.sNull(appInfoService.getSYS_CONFIG().get("sync_key"));
-			SyncUtil.sendMsg("sysconfig",urls,key);
+			SyncUtil.sendMsg("sysconfig", urls, key);
 			return true;
 		} else
 			return false;
@@ -75,7 +77,7 @@ public class ConfigAction {
 			appInfoService.InitSysConfig();
 			String urls = Strings.sNull(appInfoService.getSYS_CONFIG().get("sync_url"));
 			String key = Strings.sNull(appInfoService.getSYS_CONFIG().get("sync_key"));
-			SyncUtil.sendMsg("sysconfig",urls,key);
+			SyncUtil.sendMsg("sysconfig", urls, key);
 			return true;
 		} else
 			return false;
@@ -87,16 +89,16 @@ public class ConfigAction {
 			appInfoService.InitSysConfig();
 			String urls = Strings.sNull(appInfoService.getSYS_CONFIG().get("sync_url"));
 			String key = Strings.sNull(appInfoService.getSYS_CONFIG().get("sync_key"));
-			SyncUtil.sendMsg("sysconfig",urls,key);
+			SyncUtil.sendMsg("sysconfig", urls, key);
 			return true;
 		} else
 			return false;
 	}
 
 	@At
-	@Ok("raw")
-	public String list(String contion) {
-		return sysConfigService.listForDataTable(contion);
+	@Ok("json")
+	public Object list(@Param("contion") String contion) {
+		return sysConfigService.list(Json.fromJsonAsList(PageProperties.class, contion));
 	}
 
 }

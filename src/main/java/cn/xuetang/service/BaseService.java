@@ -4,7 +4,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.nutz.dao.Cnd;
@@ -18,15 +22,18 @@ import org.nutz.dao.sql.Criteria;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.sql.SqlCallback;
 import org.nutz.json.Json;
+import org.nutz.lang.Lang;
+import org.nutz.lang.Mirror;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.service.IdEntityService;
 
-import cn.xuetang.common.dataTable.DataTableReturn;
 import cn.xuetang.common.dataTable.DataTableInput;
+import cn.xuetang.common.dataTable.DataTableReturn;
 import cn.xuetang.common.dataTable.DataTableUtil;
-
+import cn.xuetang.common.page.PageAec;
+import cn.xuetang.common.page.PageProperties;
 import cn.xuetang.common.util.DBObject;
 
 public class BaseService<T> extends IdEntityService<T> {
@@ -353,4 +360,53 @@ public class BaseService<T> extends IdEntityService<T> {
 		dataTableBase.setAaData(result);		
         return Json.toJson(dataTableBase);
     }
+    public Criteria createContion(PageAec page) {
+		Criteria cri = Cnd.cri();
+		String search = page.getsSearch();
+		if (org.apache.commons.lang.StringUtils.isNotBlank(search)) {
+			for (int i = 0; i < 4; i++) {
+				Object obj = Mirror.me(PageAec.class).getValue(page, "mDataProp_" + i);
+				if (Lang.isEmpty(obj)) {
+					continue;
+				}
+				cri.where().orLike(obj.toString(), page.getsSearch());
+			}
+		}
+		String descOrAsc = page.getsSortDir_0();
+		for (int i = 0; i < 4; i++) {
+			Object obj = Mirror.me(PageAec.class).getValue(page, "mDataProp_" + i);
+			if (Lang.isEmpty(obj) || Lang.isEmpty(descOrAsc)) {
+				continue;
+			}
+			switch (descOrAsc) {
+			case "desc":
+				cri.getOrderBy().desc(obj.toString());
+				break;
+			default:
+				cri.getOrderBy().asc(obj.toString());
+				break;
+			}
+		}
+		return cri;
+	}
+    public DataTableReturn list(List<PageProperties> pageProperties) {
+		Map<String, Object> parmas = new HashMap<String, Object>();
+		for (PageProperties pp : pageProperties) {
+			parmas.put(pp.getName(), pp.getValue());
+		}
+		PageAec page = Lang.map2Object(parmas, PageAec.class);
+		// 根据取出的对象生成查询条件
+		Criteria cri = createContion(page);
+		int pageNo = page.getiDisplayStart();// 页数
+		int pageCount = page.getiDisplayLength();// 每页的数量
+		Pager pager = dao().createPager(pageNo / pageCount + 1, pageCount);
+		List<T> result = dao().query(getEntityClass(), cri, pager);
+		DataTableReturn dataTableBase = new DataTableReturn();
+		dataTableBase.setsEcho(page.getsEcho());
+		int total = dao().count(getEntityClass(), cri);
+		dataTableBase.setiTotalDisplayRecords(total);
+		dataTableBase.setiTotalRecords(total);
+		dataTableBase.setAaData(result);
+		return dataTableBase;
+	}
 }
