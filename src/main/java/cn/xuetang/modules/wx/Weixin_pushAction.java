@@ -14,6 +14,7 @@ import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.QueryResult;
 import org.nutz.dao.Sqls;
+import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Criteria;
 import org.nutz.dao.sql.Sql;
@@ -138,7 +139,7 @@ public class Weixin_pushAction {
 					QueryResult queryResult = userConnWXService.listPagerSql(sql, pager);
 					StringBuilder sb = new StringBuilder();
 					int total = 0;
-					for (Map map : queryResult.getList(Map.class)) {
+					for (Record map : queryResult.getList(Record.class)) {
 						sb.append(Strings.sNull(map.get("openid")) + ",");
 						total++;
 					}
@@ -173,8 +174,8 @@ public class Weixin_pushAction {
 					if (!Strings.isBlank(weixin_push.getPush_city())) {
 						s += " and WX_CITY='" + weixin_push.getPush_city() + "'";
 					}
-					List<Map> list = userConnWXService.listMap(Sqls.create(s));
-					for (Map map : list) {
+					List<Record> list = userConnWXService.listMap(Sqls.create(s));
+					for (Record map : list) {
 						if (!openidList.contains(Strings.sNull(map.get("openid")))) {
 							openidList.add(Strings.sNull(map.get("openid")));
 						}

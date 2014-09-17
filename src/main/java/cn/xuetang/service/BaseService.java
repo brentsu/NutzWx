@@ -18,6 +18,7 @@ import org.nutz.dao.Dao;
 import org.nutz.dao.QueryResult;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Entity;
+import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Criteria;
 import org.nutz.dao.sql.Sql;
@@ -155,7 +156,7 @@ public class BaseService<T> extends IdEntityService<T> {
 	 * @param sql
 	 * @return
 	 */
-	public <T> List<String> getStrRowValues(Sql sql) {
+	public List<String> getStrRowValues(Sql sql) {
 		sql.setCallback(new SqlCallback() {
 			@Override
 			public Object invoke(Connection conn, ResultSet rs, Sql sql) throws SQLException {
@@ -331,13 +332,13 @@ public class BaseService<T> extends IdEntityService<T> {
 		sql.setPager(pager);
 		sql.setCallback(Sqls.callback.records());
 		dao().execute(sql);
-		return new QueryResult(sql.getList(Map.class), pager);
+		return new QueryResult(sql.getList(Record.class), pager);
 	}
 
-	public List<Map> listMap(Sql sql) {
+	public List<Record> listMap(Sql sql) {
 		sql.setCallback(Sqls.callback.records());
 		dao().execute(sql);
-		return sql.getList(Map.class);
+		return sql.getList(Record.class);
 	}
 
 	/**
