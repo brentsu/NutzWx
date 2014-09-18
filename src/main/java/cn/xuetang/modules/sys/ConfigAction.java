@@ -28,7 +28,7 @@ public class ConfigAction {
 	@Inject
 	private AppInfoService appInfoService;
 
-	@At
+	@At("")
 	@Ok("vm:template.private.sys.config")
 	public void sys_config() {
 

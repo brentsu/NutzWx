@@ -382,13 +382,10 @@ public class BaseService<T> extends IdEntityService<T> {
 				if (Lang.isEmpty(obj)) {
 					continue;
 				}
-				switch (descOrAsc) {
-				case "desc":
-					cri.getOrderBy().desc(obj.toString());
-					break;
-				default:
+				if("desc".equals(descOrAsc)){
+					cri.getOrderBy().desc(obj.toString());	
+				}else{
 					cri.getOrderBy().asc(obj.toString());
-					break;
 				}
 			}
 		}
