@@ -18,7 +18,7 @@ public class CaptchaModule {
 	private ImageCaptchaService imageCaptchaService;
 
 	@At
-	@Ok("raw:image/jpeg")
+	@Ok("raw:image/jpg")
 	@Filters
 	public Object captcha(HttpSession session, HttpServletRequest req) {
 		return imageCaptchaService.getChallengeForID(session.getId(), req.getLocale());
