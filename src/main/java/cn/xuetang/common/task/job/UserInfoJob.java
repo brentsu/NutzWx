@@ -17,6 +17,7 @@ import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.PersistJobDataAfterExecution;
 
 import cn.xuetang.common.util.DateUtil;
 import cn.xuetang.common.util.EmojiFilter;
@@ -31,7 +32,8 @@ import cn.xuetang.service.user.UserConnWXService;
  * Created by Wizzer on 14-4-2.
  */
 @IocBean
-public class UserInfoJob implements Job {
+@PersistJobDataAfterExecution
+public class UserInfoJob implements Job  {
     @Inject
     private AppInfoService appInfoService;
     @Inject
