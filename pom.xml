@@ -9,7 +9,6 @@
 	<url>http://www.nutzwx.com</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.home>D:\Tools\Java\jdk1.7.0_45</java.home>
 	</properties>
 	<licenses>
 		<license>
@@ -323,7 +322,7 @@
 		            </excludes>
 		            <compilerArguments>
                         <verbose />
-                        <bootclasspath>${java.home}\jre\lib\rt.jar;${java.home}\jre\lib\jce.jar</bootclasspath>
+                        <bootclasspath>rt.jar;jce.jar</bootclasspath>
                     </compilerArguments>
 		        </configuration>
 		      </execution>
@@ -339,7 +338,7 @@
 					<encoding>UTF-8</encoding>
 					<compilerArguments>
                         <verbose />
-                        <bootclasspath>${java.home}\jre\lib\rt.jar;${java.home}\jre\lib\jce.jar</bootclasspath>
+                        <bootclasspath>rt.jar;jce.jar</bootclasspath>
                     </compilerArguments>
 				</configuration>
 			</plugin>
